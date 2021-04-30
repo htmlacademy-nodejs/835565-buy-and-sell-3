@@ -3,6 +3,7 @@
 const chalk = require(`chalk`);
 const version = require(`./version`);
 const generate = require(`./generate`);
+const server = require(`./server`);
 
 const moduleName = `--help`;
 const helpText = `
@@ -15,6 +16,7 @@ const helpText = `
     ${version.name}:            выводит номер версии
     ${moduleName}:               печатает этот текст
     ${generate.name} <count>    формирует файл mocks.json
+    ${server.name}              запускает http-сервер
 `;
 
 module.exports = {
