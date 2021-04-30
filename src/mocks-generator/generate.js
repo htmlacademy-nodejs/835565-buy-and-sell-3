@@ -10,9 +10,6 @@ const {
   DEFAULT_COUNT,
   FILE_NAME,
   CATEGORIES_MIN_NUM,
-  OFFER_TITLES,
-  OFFER_DESCRIPTIONS,
-  CATEGORIES,
   PriceLimit,
   OfferType,
   ImgTitleIndex,
@@ -23,23 +20,41 @@ const {
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const generateOffers = (count) => {
+const OFFER_TITLES_PATH = `../data/titles.txt`;
+const OFFER_DESCRIPTIONS_PATH = `../data/descriptions.txt`;
+const OFFER_CATEGORIES_PATH = `../data/categories.txt`;
+
+const readContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, `utf8`);
+    return content.trim().split(`\n`);
+  } catch (error) {
+    console.error(chalk.red(error));
+    return [];
+  }
+};
+
+const generateOffers = (count, titles, descriptions, categories) => {
   return Array(count).fill({}).map(() => ({
-    title: OFFER_TITLES[getRandomNum(0, OFFER_TITLES.length - 1)],
+    title: titles[getRandomNum(0, titles.length - 1)],
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
-    description: shuffle(OFFER_DESCRIPTIONS).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
+    description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    category: shuffle(CATEGORIES).slice(0, getRandomNum(CATEGORIES_MIN_NUM, CATEGORIES.length - 1))
+    category: shuffle(categories).slice(0, getRandomNum(CATEGORIES_MIN_NUM, categories.length - 1))
   }));
 };
 
 module.exports = {
   name: `--generate`,
   async run(args) {
+    const titles = await readContent(OFFER_TITLES_PATH);
+    const descriptions = await readContent(OFFER_DESCRIPTIONS_PATH);
+    const categories = await readContent(OFFER_CATEGORIES_PATH);
+
     const [count] = args;
     const offersCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const offers = JSON.stringify(generateOffers(offersCount));
+    const offers = JSON.stringify(generateOffers(offersCount, titles, descriptions, categories));
 
     try {
       await fs.writeFile(FILE_NAME, offers);
