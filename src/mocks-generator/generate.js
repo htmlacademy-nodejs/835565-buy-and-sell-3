@@ -20,7 +20,7 @@ const {
   ExitCode
 } = require(`./const`);
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
 const generateOffers = (count) => {
@@ -36,17 +36,18 @@ const generateOffers = (count) => {
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const offersCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
     const offers = JSON.stringify(generateOffers(offersCount));
 
-    fs.writeFile(FILE_NAME, offers, (err) => {
-      return (
-        err
-          ? console.error(chalk.red(`Can't write data to file...`)) && process.exit(ExitCode.ERROR)
-          : console.info(chalk.green(`Operation success. File created.`)) && process.exit(ExitCode.SUCCESS)
-      );
-    });
+    try {
+      await fs.writeFile(FILE_NAME, offers);
+      console.info(chalk.green(`Operation success. File created.`));
+      process.exit(ExitCode.SUCCESS);
+    } catch (error) {
+      console.error(chalk.red(`Can't write data to file...`));
+      process.exit(ExitCode.ERROR);
+    }
   }
 };
