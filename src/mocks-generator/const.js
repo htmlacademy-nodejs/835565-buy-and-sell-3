@@ -8,6 +8,7 @@ const DEFAULT_PORT = 3000;
 const FILE_NAME = `mocks.json`;
 const FILE_PATH = `./src/service/mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND`;
+const MAX_ID_LENGTH = 10;
 
 const url = {
   ROOT: `/`,
@@ -44,6 +45,16 @@ const ImgTitleIndex = {
   MAX: 16,
 };
 
+const CommentsNum = {
+  MIN: 1,
+  MAX: 4,
+};
+
+const CommentsSentencesNum = {
+  MIN: 1,
+  MAX: 3,
+};
+
 module.exports = {
   DEFAULT_COUNT,
   DEFAULT_COMMAND,
@@ -53,6 +64,7 @@ module.exports = {
   FILE_NAME,
   FILE_PATH,
   NOT_FOUND_MESSAGE,
+  MAX_ID_LENGTH,
   url,
   HttpCode,
   ExitCode,
@@ -60,4 +72,6 @@ module.exports = {
   OfferType,
   ImgTitleIndex,
   OfferSentencesNum,
+  CommentsNum,
+  CommentsSentencesNum,
 };
