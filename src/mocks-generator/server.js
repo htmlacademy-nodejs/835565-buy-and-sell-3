@@ -10,7 +10,7 @@ const {
   FILE_PATH,
   NOT_FOUND_MESSAGE,
   HttpCode,
-} = require(`./const`);
+} = require(`../const`);
 
 const app = express();
 const offersRouter = new Router();

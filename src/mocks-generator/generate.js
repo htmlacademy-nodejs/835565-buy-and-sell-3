@@ -8,7 +8,7 @@ const {
   DEFAULT_COUNT,
   FILE_NAME,
   ExitCode,
-} = require(`./const`);
+} = require(`../const`);
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);

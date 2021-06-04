@@ -10,7 +10,7 @@ const {
   OfferSentencesNum,
   CommentsNum,
   CommentsSentencesNum,
-} = require(`./const`);
+} = require(`../const`);
 
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);

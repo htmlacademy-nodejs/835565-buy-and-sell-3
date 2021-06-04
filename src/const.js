@@ -7,8 +7,9 @@ const CATEGORIES_MIN_NUM = 1;
 const DEFAULT_PORT = 3000;
 const FILE_NAME = `mocks.json`;
 const FILE_PATH = `./src/service/mocks.json`;
-const NOT_FOUND_MESSAGE = `NOT FOUND`;
+const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
+const API_PREFIX = `/api`;
 
 const url = {
   ROOT: `/`,
@@ -16,6 +17,8 @@ const url = {
 
 const HttpCode = {
   OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
   NOT_FOUND: 404,
   SERVER_ERROR: 500,
 };
@@ -65,6 +68,7 @@ module.exports = {
   FILE_PATH,
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,
+  API_PREFIX,
   url,
   HttpCode,
   ExitCode,
