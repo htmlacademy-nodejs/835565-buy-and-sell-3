@@ -49,7 +49,7 @@ const generateOffers = (count, titles, descriptions, categories, comments) => {
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    category: shuffle(categories).slice(0, getRandomNum(CATEGORIES_MIN_NUM, categories.length - 1)),
+    categories: shuffle(categories).slice(0, getRandomNum(CATEGORIES_MIN_NUM, categories.length - 1)),
     comments: generateComments(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), comments),
   }));
 };
