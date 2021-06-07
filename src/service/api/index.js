@@ -3,7 +3,7 @@
 const {Router} = require(`express`);
 const category = require(`./category`);
 const offer = require(`./offer`);
-const search = require(`../api/search`);
+const search = require(`./search`);
 
 const {
   CategoryService,
@@ -16,12 +16,23 @@ const getMockData = require(`../lib/get-mock-data`);
 
 const app = new Router();
 
-(async () => {
-  const mockData = await getMockData();
+const launchApp = async () => {
+  let mockData = null;
 
-  category(app, new CategoryService(mockData));
-  search(app, new SearchService(mockData));
-  offer(app, new OfferService(mockData), new CommentService());
-})();
+  try {
+    mockData = await getMockData();
+
+    category(app, new CategoryService(mockData));
+    search(app, new SearchService(mockData));
+    offer(app, new OfferService(mockData), new CommentService());
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+
+  return Promise.resolve(mockData);
+};
+
+launchApp();
 
 module.exports = app;
