@@ -41,7 +41,7 @@ const generateComments = (count, comments) => {
   }));
 };
 
-const generateOffers = (count, titles, descriptions, categories, comments) => {
+const generateOffers = (count, {titles, descriptions, categories, comments}) => {
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     title: titles[getRandomNum(0, titles.length - 1)],

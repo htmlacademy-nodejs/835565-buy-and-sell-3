@@ -31,14 +31,17 @@ const readContent = async (filePath) => {
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const titles = await readContent(OFFER_TITLES_PATH);
-    const descriptions = await readContent(OFFER_DESCRIPTIONS_PATH);
-    const categories = await readContent(OFFER_CATEGORIES_PATH);
-    const comments = await readContent(FILE_COMMENTS_PATH);
+
+    const options = {
+      titles: await readContent(OFFER_TITLES_PATH),
+      descriptions: await readContent(OFFER_DESCRIPTIONS_PATH),
+      categories: await readContent(OFFER_CATEGORIES_PATH),
+      comments: await readContent(FILE_COMMENTS_PATH),
+    };
 
     const [count] = args;
     const offersCount = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    const offers = JSON.stringify(generateOffers(offersCount, titles, descriptions, categories, comments));
+    const offers = JSON.stringify(generateOffers(offersCount, options));
 
     try {
       await fs.writeFile(FILE_NAME, offers);
