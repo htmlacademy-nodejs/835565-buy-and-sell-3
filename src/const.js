@@ -11,6 +11,9 @@ const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
 const API_PREFIX = `/api`;
 
+const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
+const defaultCommentKeys = [`text`];
+
 const url = {
   ROOT: `/`,
 };
@@ -69,6 +72,8 @@ module.exports = {
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,
   API_PREFIX,
+  defaultOfferKeys,
+  defaultCommentKeys,
   url,
   HttpCode,
   ExitCode,

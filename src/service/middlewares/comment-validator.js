@@ -2,7 +2,7 @@
 
 const {HttpCode} = require(`../../const`);
 
-const defaultCommentKeys = [`text`];
+const {defaultCommentKeys} = require(`../../const`);
 
 module.exports = (req, res, next) => {
   const comment = req.body;
