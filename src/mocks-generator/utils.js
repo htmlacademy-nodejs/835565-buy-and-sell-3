@@ -1,5 +1,17 @@
 'use strict';
 
+const {nanoid} = require(`nanoid`);
+const {
+  CATEGORIES_MIN_NUM,
+  MAX_ID_LENGTH,
+  PriceLimit,
+  OfferType,
+  ImgTitleIndex,
+  OfferSentencesNum,
+  CommentsNum,
+  CommentsSentencesNum,
+} = require(`../const`);
+
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -22,8 +34,30 @@ const getImgFileName = (num) => {
   );
 };
 
+const generateComments = (count, comments) => {
+  return Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    text: shuffle(comments).slice(0, getRandomNum(CommentsSentencesNum.MIN, CommentsSentencesNum.MAX)).join(` `),
+  }));
+};
+
+const generateOffers = (count, {titles, descriptions, categories, comments}) => {
+  return Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    title: titles[getRandomNum(0, titles.length - 1)],
+    picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
+    description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
+    type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
+    sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
+    categories: shuffle(categories).slice(0, getRandomNum(CATEGORIES_MIN_NUM, categories.length - 1)),
+    comments: generateComments(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), comments),
+  }));
+};
+
 module.exports = {
   getRandomNum,
   shuffle,
   getImgFileName,
+  generateOffers,
+  generateComments,
 };
