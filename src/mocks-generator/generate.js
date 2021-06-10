@@ -2,7 +2,7 @@
 
 const {
   generateOffers,
-} = require(`./utils`);
+} = require(`../utils`);
 
 const {
   DEFAULT_COUNT,
