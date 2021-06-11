@@ -8,6 +8,7 @@
     "jest": "jest",
     "eslint": "eslint --ext .js src/",
     "start": "node ./src/service/service.js",
+    "generate": "node ./src/service/service.js --generate 10",
     "start.dev": "nodemon ./src/service/service.js --server",
     "start-front-server": "nodemon ./src/express/index.js"
   },
