@@ -14,6 +14,11 @@ const API_PREFIX = `/api`;
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 const url = {
   ROOT: `/`,
 };
@@ -83,4 +88,5 @@ module.exports = {
   OfferSentencesNum,
   CommentsNum,
   CommentsSentencesNum,
+  Env,
 };
