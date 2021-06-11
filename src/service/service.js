@@ -1,6 +1,6 @@
 'use strict';
 
-const {MocksGenerator} = require(`../mocks-generator`);
+const {MocksGenerator} = require(`./cli`);
 
 const {
   DEFAULT_COMMAND,

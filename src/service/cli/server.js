@@ -2,14 +2,15 @@
 
 const chalk = require(`chalk`);
 const express = require(`express`);
-const routes = require(`../service/api`);
+const routes = require(`../api`);
 
 const {
   DEFAULT_PORT,
   NOT_FOUND_MESSAGE,
   API_PREFIX,
   HttpCode,
-} = require(`../const`);
+  ExitCode,
+} = require(`../../const`);
 
 const app = express();
 app.use(express.json());
@@ -28,11 +29,16 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
 
-    app.listen(port, (error) => {
-      if (error) {
-        return console.error(chalk.red(`Ошибка при создании сервера`, error));
-      }
-      return console.info(chalk.green(`Ожидаю соединений на ${port}`));
-    });
+    try {
+      app.listen(port, (error) => {
+        if (error) {
+          return console.error(chalk.red(`Ошибка при создании сервера`, error));
+        }
+        return console.info(chalk.green(`Ожидаю соединений на ${port}`));
+      });
+    } catch (error) {
+      console.error(`An error occurred: ${error.message}`);
+      process.exit(ExitCode.ERROR);
+    }
   }
 };
