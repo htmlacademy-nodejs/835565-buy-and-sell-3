@@ -10,7 +10,7 @@ const {
   OfferSentencesNum,
   CommentsNum,
   CommentsSentencesNum,
-} = require(`../const`);
+} = require(`./const`);
 
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
@@ -54,10 +54,20 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   }));
 };
 
+const getCategories = (items) => {
+  const categories = items.reduce((acc, currentItem) => {
+    currentItem.categories.forEach((categoryItem) => acc.add(categoryItem));
+    return acc;
+  }, new Set());
+
+  return [...categories];
+};
+
 module.exports = {
   getRandomNum,
   shuffle,
   getImgFileName,
   generateOffers,
   generateComments,
+  getCategories,
 };

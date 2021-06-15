@@ -2,21 +2,21 @@
 
 const {
   generateOffers,
-} = require(`./utils`);
+} = require(`../../utils`);
 
 const {
   DEFAULT_COUNT,
   FILE_NAME,
   ExitCode,
-} = require(`../const`);
+} = require(`../../const`);
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 
-const OFFER_TITLES_PATH = `../data/titles.txt`;
-const OFFER_DESCRIPTIONS_PATH = `../data/descriptions.txt`;
-const OFFER_CATEGORIES_PATH = `../data/categories.txt`;
-const FILE_COMMENTS_PATH = `../data/comments.txt`;
+const OFFER_TITLES_PATH = `./src/data/titles.txt`;
+const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
+const OFFER_CATEGORIES_PATH = `./src/data/categories.txt`;
+const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
 
 const readContent = async (filePath) => {
   try {

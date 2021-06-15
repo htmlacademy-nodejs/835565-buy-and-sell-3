@@ -55,7 +55,7 @@ module.exports = (app, offerService, commentService) => {
       .json(comments);
   });
 
-  offersRoute.put(`/:offerId`, offerValidator, (req, res) => {
+  offersRoute.put(`/:offerId`, [offerExist(offerService), offerValidator], (req, res) => {
     const {offerId} = req.params;
     const updatedOffer = offerService.update(offerId, req.body);
     if (!updatedOffer) {
@@ -63,7 +63,7 @@ module.exports = (app, offerService, commentService) => {
         .send(`Unable to find offer with id:${offerId}`);
     }
     return res.status(HttpCode.OK)
-      .send(`Updated`);
+      .json(updatedOffer);
   });
 
   offersRoute.delete(`/:offerId`, (req, res) => {

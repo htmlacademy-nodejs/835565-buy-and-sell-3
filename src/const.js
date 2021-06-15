@@ -6,13 +6,18 @@ const USER_ARGV_INDEX = 2;
 const CATEGORIES_MIN_NUM = 1;
 const DEFAULT_PORT = 3000;
 const FILE_NAME = `mocks.json`;
-const FILE_PATH = `./src/service/mocks.json`;
+const FILE_PATH = `./mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
 const API_PREFIX = `/api`;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
+
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
 
 const url = {
   ROOT: `/`,
@@ -83,4 +88,5 @@ module.exports = {
   OfferSentencesNum,
   CommentsNum,
   CommentsSentencesNum,
+  Env,
 };
