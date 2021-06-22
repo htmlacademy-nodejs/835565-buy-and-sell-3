@@ -1,4 +1,15 @@
 extends layout.pug
 block content
   main.page-content
-    include partials/comments/comments-section.pug
+    section.comments
+    .comments__wrapper
+      h1.visually-hidden Страница комментариев
+      each offer in offers
+        .comments__block
+          .comments__header
+            a.announce-card(href='#')
+              h2.announce-card__title #{offer.title}
+              span.announce-card__info
+                span.announce-card__price ₽ #{offer.sum}
+                +ticketLabel(offer.type)(class=`announce-card__type`)
+          include partials/comments-list.pug
