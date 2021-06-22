@@ -1,0 +1,19 @@
+block content
+  ul
+    each offer in offers
+      li.tickets-list__item.js-card
+        .ticket-card.ticket-card--color06
+          .ticket-card__img
+            img(src=`/img/${offer.picture}` alt=offer.title)
+          .ticket-card__info
+            +ticketLabel(offer.type)
+            .ticket-card__categories
+              each category in offer.categories
+                a(href='#') #{category}
+            .ticket-card__header
+              h3.ticket-card__title
+                a(href='#') #{offer.title}
+              p.ticket-card__price
+                span.js-sum #{offer.sum}
+                |  ₽
+          button.ticket-card__del.js-delete(type='button') Удалить
