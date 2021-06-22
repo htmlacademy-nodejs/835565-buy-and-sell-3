@@ -3,13 +3,17 @@
 const DEFAULT_COUNT = 1;
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT_SERVER = 3000;
+const DEFAULT_PORT_FRONT = 8080;
 const FILE_NAME = `mocks.json`;
 const FILE_PATH = `./mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
 const API_PREFIX = `/api`;
 const TIMEOUT = 1000;
+const PUBLIC_DIR = `public`;
+const UPLOAD_DIR = `upload`;
+const TEMPLATES_DIR = `templates`;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
@@ -75,13 +79,17 @@ module.exports = {
   DEFAULT_COUNT,
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-  DEFAULT_PORT,
+  DEFAULT_PORT_SERVER,
+  DEFAULT_PORT_FRONT,
   FILE_NAME,
   FILE_PATH,
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,
   API_PREFIX,
   TIMEOUT,
+  PUBLIC_DIR,
+  UPLOAD_DIR,
+  TEMPLATES_DIR,
   defaultOfferKeys,
   defaultCommentKeys,
   url,
