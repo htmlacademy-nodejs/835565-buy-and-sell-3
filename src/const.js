@@ -10,6 +10,7 @@ const FILE_PATH = `./mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
 const API_PREFIX = `/api`;
+const TIMEOUT = 1000;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
@@ -77,6 +78,7 @@ module.exports = {
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,
   API_PREFIX,
+  TIMEOUT,
   defaultOfferKeys,
   defaultCommentKeys,
   url,
