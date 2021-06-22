@@ -3,7 +3,6 @@
 const DEFAULT_COUNT = 1;
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
-const CATEGORIES_MIN_NUM = 1;
 const DEFAULT_PORT = 3000;
 const FILE_NAME = `mocks.json`;
 const FILE_PATH = `./mocks.json`;
@@ -35,6 +34,11 @@ const HttpCode = {
 const ExitCode = {
   SUCCESS: 0,
   ERROR: 1,
+};
+
+const CategoriesNum = {
+  MIN: 1,
+  MAX: 3
 };
 
 const OfferSentencesNum = {
@@ -71,7 +75,6 @@ module.exports = {
   DEFAULT_COUNT,
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
-  CATEGORIES_MIN_NUM,
   DEFAULT_PORT,
   FILE_NAME,
   FILE_PATH,
@@ -88,6 +91,7 @@ module.exports = {
   OfferType,
   ImgTitleIndex,
   OfferSentencesNum,
+  CategoriesNum,
   CommentsNum,
   CommentsSentencesNum,
   Env,

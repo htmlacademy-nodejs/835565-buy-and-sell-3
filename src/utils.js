@@ -2,7 +2,6 @@
 
 const {nanoid} = require(`nanoid`);
 const {
-  CATEGORIES_MIN_NUM,
   MAX_ID_LENGTH,
   PriceLimit,
   OfferType,
@@ -10,6 +9,7 @@ const {
   OfferSentencesNum,
   CommentsNum,
   CommentsSentencesNum,
+  CategoriesNum,
 } = require(`./const`);
 
 const getRandomNum = (min, max) => {
@@ -49,7 +49,7 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    categories: shuffle(categories).slice(0, getRandomNum(CATEGORIES_MIN_NUM, categories.length - 1)),
+    categories: shuffle(categories).slice(0, getRandomNum(CategoriesNum.MIN, CategoriesNum.MAX)),
     comments: generateComments(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), comments),
   }));
 };
