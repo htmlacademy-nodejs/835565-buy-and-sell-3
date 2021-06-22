@@ -1,11 +1,22 @@
 'use strict';
 
 const {Router} = require(`express`);
+const api = require(`../api`).getAPI();
 const offersRouter = new Router();
 
-offersRouter.get(`/add`, (request, response) => response.render(`offers/new-ticket`));
-offersRouter.get(`/category/:id`, (request, response) => response.render(`offers/category`));
-offersRouter.get(`/edit/:id`, (request, response) => response.render(`offers/ticket-edit`));
-offersRouter.get(`/:id`, (request, response) => response.render(`offers/ticket`));
+offersRouter.get(`/add`, (req, res) => res.render(`offers/new-ticket`));
+
+offersRouter.get(`/category/:id`, (req, res) => res.render(`offers/category`));
+
+offersRouter.get(`/edit/:id`, async (req, res) => {
+  const {id} = req.params;
+  const [offer, categories] = await Promise.all([
+    api.getOffer(id),
+    api.getCategories()
+  ]);
+  res.render(`offers/ticket-edit`, {offer, categories});
+});
+
+offersRouter.get(`/:id`, (req, res) => res.render(`offers/ticket`));
 
 module.exports = offersRouter;
