@@ -13,6 +13,7 @@ const API_PREFIX = `/api`;
 const TIMEOUT = 1000;
 const PUBLIC_DIR = `public`;
 const UPLOAD_DIR = `upload`;
+const UPLOAD_PATH = `../upload/img/`;
 const TEMPLATES_DIR = `templates`;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
@@ -89,6 +90,7 @@ module.exports = {
   TIMEOUT,
   PUBLIC_DIR,
   UPLOAD_DIR,
+  UPLOAD_PATH,
   TEMPLATES_DIR,
   defaultOfferKeys,
   defaultCommentKeys,
