@@ -7,7 +7,8 @@ class SearchService {
 
   findAll(searchText) {
     const offers = this._offers.reduce((acc, currentOffer) => {
-      if (currentOffer.title.includes(searchText)) {
+      const formattedOfferTitle = currentOffer.title.toLowerCase();
+      if (formattedOfferTitle.includes(searchText.toLowerCase())) {
         acc.push(currentOffer);
       }
       return acc;
