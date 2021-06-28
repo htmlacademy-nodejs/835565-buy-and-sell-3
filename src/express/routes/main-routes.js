@@ -2,7 +2,10 @@
 
 const {Router} = require(`express`);
 const api = require(`../api`).getAPI();
+const {getLogger} = require(`../../service/lib/logger`);
+
 const mainRouter = new Router();
+const logger = getLogger({name: `front-api`});
 
 mainRouter.get(`/`, async (req, res) => {
   const offers = await api.getOffers();
@@ -21,11 +24,16 @@ mainRouter.get(`/search`, async (req, res) => {
       results
     });
   } catch (error) {
-    const offers = await api.getOffers();
-    res.render(`search-result-empty.pug`, {
-      results: [],
-      offers
-    });
+    try {
+      const offers = await api.getOffers();
+      res.render(`search-result-empty.pug`, {
+        results: [],
+        offers
+      });
+    } catch (err) {
+      logger.error(`Internal server error occured: ${err.message}`);
+      res.render(`errors/500`);
+    }
   }
 });
 
