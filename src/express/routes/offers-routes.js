@@ -4,7 +4,7 @@ const {Router} = require(`express`);
 const multer = require(`multer`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH, UPLOAD_PATH} = require(`../../const`);
+const {MAX_ID_LENGTH, UPLOAD_PATH, MAX_UPLOAD_FILE_SIZE} = require(`../../const`);
 const {getLogger} = require(`../../service/lib/logger`);
 
 const api = require(`../api`).getAPI();
@@ -22,7 +22,10 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({storage});
+const upload = multer({
+  storage,
+  limits: {fileSize: MAX_UPLOAD_FILE_SIZE}
+});
 
 
 offersRouter.get(`/add`, (req, res) => res.render(`offers/new-ticket`));
@@ -50,6 +53,7 @@ offersRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
     sum: body.price,
     categories: Array.isArray(body.categories) ? body.categories : [body.categories],
   };
+
   try {
     await api.createOffer(newOfferData);
     res.redirect(`/my`);

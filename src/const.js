@@ -15,6 +15,7 @@ const PUBLIC_DIR = `public`;
 const UPLOAD_DIR = `upload`;
 const UPLOAD_PATH = `../upload/img/`;
 const TEMPLATES_DIR = `templates`;
+const MAX_UPLOAD_FILE_SIZE = 1048576;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
@@ -92,6 +93,7 @@ module.exports = {
   UPLOAD_DIR,
   UPLOAD_PATH,
   TEMPLATES_DIR,
+  MAX_UPLOAD_FILE_SIZE,
   defaultOfferKeys,
   defaultCommentKeys,
   url,
