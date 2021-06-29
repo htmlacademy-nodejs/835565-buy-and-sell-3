@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   limits: {fileSize: MAX_UPLOAD_FILE_SIZE}
-});
+}).single(`avatar`);
 
 
 offersRouter.get(`/add`, (req, res) => res.render(`offers/new-ticket`));
@@ -43,24 +43,38 @@ offersRouter.get(`/edit/:id`, async (req, res) => {
 
 offersRouter.get(`/:id`, (req, res) => res.render(`offers/ticket`));
 
-offersRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
-  const {body, file} = req;
-  const newOfferData = {
-    title: body[`ticket-name`],
-    type: body.action,
-    picture: file.filename,
-    description: body.comment,
-    sum: body.price,
-    categories: Array.isArray(body.categories) ? body.categories : [body.categories],
-  };
+offersRouter.post(`/add`, async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      const errorMessage = err.message;
+      if (err instanceof multer.MulterError) {
+        res.render(`offers/new-ticket`, {errorMessage});
+        return;
+      } else {
+        logger.error(`Unknown error on file upload: ${errorMessage}`);
+        res.render(`offers/new-ticket`, {errorMessage});
+        return;
+      }
+    }
 
-  try {
-    await api.createOffer(newOfferData);
-    res.redirect(`/my`);
-  } catch (error) {
-    logger.error(`An error occurred on file upload: ${error.message}`);
-    res.redirect(`back`);
-  }
+    const {body, file} = req;
+    const newOfferData = {
+      title: body[`ticket-name`],
+      type: body.action,
+      picture: file.filename,
+      description: body.comment,
+      sum: body.price,
+      categories: Array.isArray(body.categories) ? body.categories : [body.categories],
+    };
+
+    try {
+      await api.createOffer(newOfferData);
+      res.redirect(`/my`);
+    } catch (error) {
+      logger.error(`An error occurred on file upload: ${error.message}`);
+      res.redirect(`back`);
+    }
+  });
 });
 
 module.exports = offersRouter;

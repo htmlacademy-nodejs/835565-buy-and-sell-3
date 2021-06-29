@@ -1,6 +1,8 @@
 extends ../layout.pug
 block content
   main.page-content
+    if errorMessage
+      include ../errors/error-popup.pug
     section.ticket-form
       .ticket-form__wrapper
         h1.ticket-form__title Новая публикация
