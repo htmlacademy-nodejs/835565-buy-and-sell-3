@@ -1,11 +1,80 @@
 'use strict';
 
 const {Router} = require(`express`);
+const multer = require(`multer`);
+const path = require(`path`);
+const {nanoid} = require(`nanoid`);
+const {MAX_ID_LENGTH, UPLOAD_PATH, MAX_UPLOAD_FILE_SIZE} = require(`../../const`);
+const {getLogger} = require(`../../service/lib/logger`);
+
+const api = require(`../api`).getAPI();
 const offersRouter = new Router();
 
-offersRouter.get(`/add`, (request, response) => response.render(`offers/new-ticket`));
-offersRouter.get(`/category/:id`, (request, response) => response.render(`offers/category`));
-offersRouter.get(`/edit/:id`, (request, response) => response.render(`offers/ticket-edit`));
-offersRouter.get(`/:id`, (request, response) => response.render(`offers/ticket`));
+const logger = getLogger({name: `front-api`});
+const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_PATH);
+
+const storage = multer.diskStorage({
+  destination: uploadDirAbsolute,
+  filename: (req, file, cb) => {
+    const uniqueName = nanoid(MAX_ID_LENGTH);
+    const extension = file.originalname.split(`.`).pop();
+    cb(null, `${uniqueName}.${extension}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: {fileSize: MAX_UPLOAD_FILE_SIZE}
+}).single(`avatar`);
+
+
+offersRouter.get(`/add`, (req, res) => res.render(`offers/new-ticket`));
+
+offersRouter.get(`/category/:id`, (req, res) => res.render(`offers/category`));
+
+offersRouter.get(`/edit/:id`, async (req, res) => {
+  const {id} = req.params;
+  const [offer, categories] = await Promise.all([
+    api.getOffer(id),
+    api.getCategories()
+  ]);
+  res.render(`offers/ticket-edit`, {offer, categories});
+});
+
+offersRouter.get(`/:id`, (req, res) => res.render(`offers/ticket`));
+
+offersRouter.post(`/add`, async (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      const errorMessage = err.message;
+      if (err instanceof multer.MulterError) {
+        res.render(`offers/new-ticket`, {errorMessage});
+        return;
+      } else {
+        logger.error(`Unknown error on file upload: ${errorMessage}`);
+        res.render(`offers/new-ticket`, {errorMessage});
+        return;
+      }
+    }
+
+    const {body, file} = req;
+    const newOfferData = {
+      title: body[`ticket-name`],
+      type: body.action,
+      picture: file.filename,
+      description: body.comment,
+      sum: body.price,
+      categories: Array.isArray(body.categories) ? body.categories : [body.categories],
+    };
+
+    try {
+      await api.createOffer(newOfferData);
+      res.redirect(`/my`);
+    } catch (error) {
+      logger.error(`An error occurred on file upload: ${error.message}`);
+      res.redirect(`back`);
+    }
+  });
+});
 
 module.exports = offersRouter;

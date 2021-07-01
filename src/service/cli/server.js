@@ -5,7 +5,7 @@ const routes = require(`../api`);
 const {getLogger} = require(`../lib/logger`);
 
 const {
-  DEFAULT_PORT,
+  DEFAULT_PORT_SERVER,
   NOT_FOUND_MESSAGE,
   API_PREFIX,
   HttpCode,
@@ -41,7 +41,7 @@ module.exports = {
   name: `--server`,
   run(args) {
     const [customPort] = args;
-    const port = Number.parseInt(customPort, 10) || DEFAULT_PORT;
+    const port = Number.parseInt(customPort, 10) || DEFAULT_PORT_SERVER;
 
     try {
       app.listen(port, (error) => {
