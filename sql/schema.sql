@@ -46,7 +46,7 @@ CREATE TABLE comments (
     ON UPDATE CASCADE
 );
 
-CREATE TABLE offer_categories (
+CREATE TABLE offers_categories (
   offer_id INTEGER NOT NULL,
   category_id INTEGER NOT NULL,
   CONSTRAINT offer_categories_pk PRIMARY KEY (offer_id, category_id),
