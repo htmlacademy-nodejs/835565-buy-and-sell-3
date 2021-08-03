@@ -7,16 +7,15 @@ const {
 const {
   DEFAULT_COUNT,
   FILE_NAME,
+  OFFER_TITLES_PATH,
+  OFFER_DESCRIPTIONS_PATH,
+  OFFER_CATEGORIES_PATH,
+  FILE_COMMENTS_PATH,
   ExitCode,
 } = require(`../../const`);
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-
-const OFFER_TITLES_PATH = `./src/data/titles.txt`;
-const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
-const OFFER_CATEGORIES_PATH = `./src/data/categories.txt`;
-const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
 
 const readContent = async (filePath) => {
   try {
