@@ -6,6 +6,7 @@ const USER_ARGV_INDEX = 2;
 const DEFAULT_PORT_SERVER = 3000;
 const DEFAULT_PORT_FRONT = 8080;
 const FILE_NAME = `mocks.json`;
+const DB_FILE_PATH = `./sql/fill-db.sql`;
 const FILE_PATH = `./mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
@@ -16,6 +17,11 @@ const UPLOAD_DIR = `upload`;
 const UPLOAD_PATH = `../upload/img/`;
 const TEMPLATES_DIR = `templates`;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
+
+const OFFER_TITLES_PATH = `./src/data/titles.txt`;
+const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
+const OFFER_CATEGORIES_PATH = `./src/data/categories.txt`;
+const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
@@ -68,8 +74,8 @@ const ImgTitleIndex = {
 };
 
 const CommentsNum = {
-  MIN: 1,
-  MAX: 4,
+  MIN: 2,
+  MAX: 5,
 };
 
 const CommentsSentencesNum = {
@@ -84,6 +90,7 @@ module.exports = {
   DEFAULT_PORT_SERVER,
   DEFAULT_PORT_FRONT,
   FILE_NAME,
+  DB_FILE_PATH,
   FILE_PATH,
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,
@@ -94,6 +101,10 @@ module.exports = {
   UPLOAD_PATH,
   TEMPLATES_DIR,
   MAX_UPLOAD_FILE_SIZE,
+  OFFER_TITLES_PATH,
+  OFFER_DESCRIPTIONS_PATH,
+  OFFER_CATEGORIES_PATH,
+  FILE_COMMENTS_PATH,
   defaultOfferKeys,
   defaultCommentKeys,
   url,
