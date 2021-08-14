@@ -7,6 +7,7 @@ const DEFAULT_PORT_SERVER = 3000;
 const DEFAULT_PORT_FRONT = 8080;
 const FILE_NAME = `mocks.json`;
 const DB_FILL_FILE_PATH = `./sql/fill-db.sql`;
+const DB_QUERIES_FILE_PATH = `./sql/queries.sql`;
 const FILE_PATH = `./mocks.json`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const MAX_ID_LENGTH = 10;
@@ -96,6 +97,7 @@ module.exports = {
   DEFAULT_PORT_FRONT,
   FILE_NAME,
   DB_FILL_FILE_PATH,
+  DB_QUERIES_FILE_PATH,
   FILE_PATH,
   NOT_FOUND_MESSAGE,
   MAX_ID_LENGTH,

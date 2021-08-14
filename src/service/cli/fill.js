@@ -3,6 +3,8 @@
 const {
   generateOffersForDB,
   generateQueryToFillDB,
+  generateQueryToGetDataFromDB,
+  getRandomNum,
 } = require(`../../utils`);
 
 const {
@@ -12,6 +14,7 @@ const {
   OFFER_DESCRIPTIONS_PATH,
   OFFER_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
+  DB_QUERIES_FILE_PATH,
 } = require(`../../const`);
 
 const fs = require(`fs`).promises;
@@ -71,7 +74,7 @@ module.exports = {
       return acc;
     }, []);
 
-    const values = {
+    const valuesToFill = {
       userValues: mockUsers.map(
           ({email, passwordHash, firstName, lastName, avatar}) =>
             `('${email}', '${passwordHash}', '${firstName}', '${lastName}', '${avatar}')`
@@ -95,10 +98,24 @@ module.exports = {
       ).join(`,\n`),
     };
 
-    const content = generateQueryToFillDB(values);
+    const valuesToGetData = {
+      offerId: getRandomNum(1, offers.length),
+      newCommentsLimit: 5,
+      commentsOfferId: getRandomNum(1, offers.length),
+      offersType: `OFFER`,
+      offersLimit: 2,
+      updatedTitle: `New Title`,
+      updatedOfferId: getRandomNum(1, offers.length),
+    };
+
+    const contentToFill = generateQueryToFillDB(valuesToFill);
+
+    const contentToGetData = generateQueryToGetDataFromDB(valuesToGetData);
 
     try {
       await fs.writeFile(DB_FILL_FILE_PATH, contentToFill);
+      await fs.writeFile(DB_QUERIES_FILE_PATH, contentToGetData);
+      console.info(chalk.green(`Operation success. Files created.`));
     } catch (error) {
       console.error(chalk.red(`Can't write data to file...`));
       throw new Error(error.message);
