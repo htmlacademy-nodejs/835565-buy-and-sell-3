@@ -96,19 +96,28 @@ const generateOffersForDB = (count, {titles, descriptions, commentSentences, cat
 
 const generateQueryToFillDB = ({userValues, categoryValues, offerValues, offerCategoryValues, commentValues}) => {
   return `
+/* Заполнение таблицы пользователей */
 INSERT INTO users(email, password_hash, first_name, last_name, avatar) VALUES
 ${userValues};
+
+/* Заполнение таблицы категорий */
 INSERT INTO categories(name) VALUES
 ${categoryValues};
 ALTER TABLE offers DISABLE TRIGGER ALL;
+
+/* Заполнение таблицы объявлений */
 INSERT INTO offers(title, description, type, sum, picture, user_id) VALUES
 ${offerValues};
 ALTER TABLE offers ENABLE TRIGGER ALL;
 ALTER TABLE offer_categories DISABLE TRIGGER ALL;
+
+/* Заполнение таблицы связей объявлений и категорий */
 INSERT INTO offer_categories(offer_id, category_id) VALUES
 ${offerCategoryValues};
 ALTER TABLE offer_categories ENABLE TRIGGER ALL;
 ALTER TABLE comments DISABLE TRIGGER ALL;
+
+/* Заполнение таблицы комментариев */
 INSERT INTO COMMENTS(text, user_id, offer_id) VALUES
 ${commentValues};
 ALTER TABLE comments ENABLE TRIGGER ALL;`;
