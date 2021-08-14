@@ -9,7 +9,6 @@ const {
   NOT_FOUND_MESSAGE,
   API_PREFIX,
   HttpCode,
-  ExitCode,
 } = require(`../../const`);
 
 const logger = getLogger({name: `api`});
@@ -52,7 +51,7 @@ module.exports = {
       });
     } catch (error) {
       logger.error(`An error occurred: ${error.message}`);
-      process.exit(ExitCode.ERROR);
+      throw new Error(error.message);
     }
   }
 };
