@@ -1,5 +1,6 @@
 'use strict';
 
+const dayjs = require(`dayjs`);
 const {nanoid} = require(`nanoid`);
 const {
   MAX_ID_LENGTH,
@@ -10,12 +11,18 @@ const {
   CommentsNum,
   CommentsSentencesNum,
   CategoriesNum,
+  DaysGap,
 } = require(`./const`);
 
 const getRandomNum = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const getRandomDate = () => {
+  const randomDaysGap = getRandomNum(DaysGap.MIN, DaysGap.MAX);
+  return dayjs().add(-randomDaysGap, `day`).format();
 };
 
 const shuffle = (someArray) => {
@@ -45,6 +52,7 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     title: titles[getRandomNum(0, titles.length - 1)],
+    date: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
@@ -84,6 +92,7 @@ const getRandomCategoriesId = (categoriesNum, categoriesCount) => {
 const generateOffersForDB = (count, {titles, descriptions, commentSentences, categoriesCount, mockUsersCount}) => {
   return Array(count).fill({}).map((_, index) => ({
     title: titles[getRandomNum(0, titles.length - 1)],
+    date: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
@@ -106,7 +115,7 @@ ${categoryValues};
 ALTER TABLE offers DISABLE TRIGGER ALL;
 
 /* Заполнение таблицы объявлений */
-INSERT INTO offers(title, description, type, sum, picture, user_id) VALUES
+INSERT INTO offers(title, date, description, type, sum, picture, user_id) VALUES
 ${offerValues};
 ALTER TABLE offers ENABLE TRIGGER ALL;
 ALTER TABLE offer_categories DISABLE TRIGGER ALL;

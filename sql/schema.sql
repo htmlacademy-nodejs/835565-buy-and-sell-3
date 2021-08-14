@@ -26,7 +26,7 @@ CREATE TABLE offers (
   type VARCHAR(5) NOT NULL,
   picture VARCHAR(50),
   user_id INTEGER NOT NULL,
-  created_at TIMESTAMP DEFAULT current_timestamp,
+  date TIMESTAMP DEFAULT current_timestamp,
   FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
@@ -37,7 +37,7 @@ CREATE TABLE comments (
   offer_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
   text text NOT NULL,
-  created_at TIMESTAMP DEFAULT current_timestamp,
+  date TIMESTAMP DEFAULT current_timestamp,
   FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,

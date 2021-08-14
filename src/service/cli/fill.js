@@ -7,7 +7,7 @@ const {
 
 const {
   DEFAULT_COUNT,
-  DB_FILE_PATH,
+  DB_FILL_FILE_PATH,
   OFFER_TITLES_PATH,
   OFFER_DESCRIPTIONS_PATH,
   OFFER_CATEGORIES_PATH,
@@ -80,8 +80,8 @@ module.exports = {
       categoryValues: categories.map((name) => `('${name}')`).join(`,\n`),
 
       offerValues: offers.map(
-          ({title, description, type, sum, picture, userId}) =>
-            `('${title}', '${description}', '${type}', ${sum}, '${picture}', ${userId})`
+          ({title, date, description, type, sum, picture, userId}) =>
+            `('${title}', '${date}', '${description}', '${type}', ${sum}, '${picture}', ${userId})`
       ).join(`,\n`),
 
       offerCategoryValues: offerCategories.map(
@@ -98,8 +98,7 @@ module.exports = {
     const content = generateQueryToFillDB(values);
 
     try {
-      await fs.writeFile(DB_FILE_PATH, content);
-      console.info(chalk.green(`Operation success. File created.`));
+      await fs.writeFile(DB_FILL_FILE_PATH, contentToFill);
     } catch (error) {
       console.error(chalk.red(`Can't write data to file...`));
       throw new Error(error.message);
