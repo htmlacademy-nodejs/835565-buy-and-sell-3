@@ -11,7 +11,6 @@ const {
   OFFER_DESCRIPTIONS_PATH,
   OFFER_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
-  ExitCode,
 } = require(`../../const`);
 
 const fs = require(`fs`).promises;
@@ -45,10 +44,9 @@ module.exports = {
     try {
       await fs.writeFile(FILE_NAME, offers);
       console.info(chalk.green(`Operation success. File created.`));
-      process.exit(ExitCode.SUCCESS);
     } catch (error) {
       console.error(chalk.red(`Can't write data to file...`));
-      process.exit(ExitCode.ERROR);
+      throw new Error(error.message);
     }
   }
 };
