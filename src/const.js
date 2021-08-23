@@ -16,6 +16,7 @@ const TIMEOUT = 1000;
 const PUBLIC_DIR = `public`;
 const UPLOAD_DIR = `upload`;
 const UPLOAD_PATH = `../upload/img/`;
+const LOG_FILE_PATH = `../../../logs/api.log`;
 const TEMPLATES_DIR = `templates`;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
 
@@ -30,10 +31,6 @@ const defaultCommentKeys = [`text`];
 const Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
-};
-
-const url = {
-  ROOT: `/`,
 };
 
 const HttpCode = {
@@ -106,6 +103,7 @@ module.exports = {
   PUBLIC_DIR,
   UPLOAD_DIR,
   UPLOAD_PATH,
+  LOG_FILE_PATH,
   TEMPLATES_DIR,
   MAX_UPLOAD_FILE_SIZE,
   OFFER_TITLES_PATH,
@@ -114,7 +112,6 @@ module.exports = {
   FILE_COMMENTS_PATH,
   defaultOfferKeys,
   defaultCommentKeys,
-  url,
   HttpCode,
   ExitCode,
   DaysGap,

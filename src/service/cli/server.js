@@ -10,6 +10,7 @@ const {
   NOT_FOUND_MESSAGE,
   API_PREFIX,
   HttpCode,
+  ExitCode,
 } = require(`../../const`);
 
 const logger = getLogger({name: `api`});
@@ -55,13 +56,13 @@ module.exports = {
     try {
       app.listen(port, (error) => {
         if (error) {
-          return logger.error(`Ошибка при создании сервера`, error);
+          return logger.error(`Error while hosting server: ${error.message}`);
         }
-        return logger.info(`Ожидаю соединений на ${port}`);
+        return logger.info(`Listening to port: ${port}`);
       });
     } catch (error) {
       logger.error(`An error occurred: ${error.message}`);
-      throw new Error(error.message);
+      throw new Error(`Error while creating server: ${error.message}`);
     }
   }
 };
