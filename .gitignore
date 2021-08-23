@@ -13,6 +13,9 @@ node_modules/
 mocks.json
 *http
 
+# Файл с переменными окружения
+.env
+
 # Директория с загруженными изображениями
 src/express/upload/img/
 
