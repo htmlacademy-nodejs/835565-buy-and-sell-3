@@ -15,6 +15,7 @@ const {
   OFFER_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
   DB_QUERIES_FILE_PATH,
+  ExitCode,
 } = require(`../../const`);
 
 const fs = require(`fs`).promises;
@@ -116,9 +117,10 @@ module.exports = {
       await fs.writeFile(DB_FILL_FILE_PATH, contentToFill);
       await fs.writeFile(DB_QUERIES_FILE_PATH, contentToGetData);
       console.info(chalk.green(`Operation success. Files created.`));
+      process.exit();
     } catch (error) {
-      console.error(chalk.red(`Can't write data to file...`));
-      throw new Error(error.message);
+      console.error(chalk.red(`Can't write data to files. ${error.message}`));
+      process.exit(ExitCode.ERROR);
     }
   }
 };
