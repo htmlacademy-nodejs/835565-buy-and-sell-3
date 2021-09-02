@@ -1,14 +1,15 @@
 'use strict';
 
 const Sequelize = require(`sequelize`);
+const {Env} = require(`../../const`);
 const {DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT} = process.env;
 
 const envVariablesAreMissing = [
   DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 ].some((variable) => variable === undefined);
 
-if (process.env.npm_lifecycle_event) {
-  if (process.env.npm_lifecycle_event.includes(`start`) && envVariablesAreMissing) {
+if (process.env.NODE_ENV === Env.DEVELOPMENT) {
+  if (envVariablesAreMissing) {
     throw new Error(`Some environmental variables are not defined`);
   }
 }
