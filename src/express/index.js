@@ -20,13 +20,9 @@ app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 app.set(`views`, path.resolve(__dirname, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 
-try {
-  app.listen(DEFAULT_PORT_FRONT, (error) => {
-    if (error) {
-      return console.error(`Error while hosting front server: ${error.message}`);
-    }
-    return console.info(`Listening to port: ${DEFAULT_PORT_FRONT}`);
-  });
-} catch (error) {
-  throw new Error(`Error while creating front server: ${error.message}`);
-}
+app.listen(DEFAULT_PORT_FRONT, (error) => {
+  if (error) {
+    return console.error(`Error while hosting front server: ${error.message}`);
+  }
+  return console.info(`Listening to port: ${DEFAULT_PORT_FRONT}`);
+});
