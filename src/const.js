@@ -19,6 +19,7 @@ const UPLOAD_PATH = `../upload/img/`;
 const LOG_FILE_PATH = `../../../logs/api.log`;
 const TEMPLATES_DIR = `templates`;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
+const DESCRIPTION_CHAR_LENGTH = 1000;
 
 const OFFER_TITLES_PATH = `./src/data/titles.txt`;
 const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
@@ -110,6 +111,7 @@ module.exports = {
   OFFER_DESCRIPTIONS_PATH,
   OFFER_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
+  DESCRIPTION_CHAR_LENGTH,
   defaultOfferKeys,
   defaultCommentKeys,
   HttpCode,
