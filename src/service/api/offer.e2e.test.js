@@ -6,7 +6,7 @@ const request = require(`supertest`);
 const offer = require(`./offer`);
 const OfferService = require(`../data-service/offer-service`);
 const CommentService = require(`../data-service/comment-service`);
-const {getRandomNum} = require(`../../utils`);
+const {getRandomNum} = require(`../../utils/utils-common`);
 const {HttpCode} = require(`../../const`);
 const {mockData} = require(`./offer.e2e.test-mocks`);
 

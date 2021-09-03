@@ -1,8 +1,7 @@
 'use strict';
 
-const {
-  generateOffers,
-} = require(`../../utils`);
+const {readContent} = require(`../../utils/utils-common`);
+const {generateOffers} = require(`../../utils/utils-data`);
 
 const {
   DEFAULT_COUNT,
@@ -16,16 +15,6 @@ const {
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-
-const readContent = async (filePath) => {
-  try {
-    const content = await fs.readFile(filePath, `utf8`);
-    return content.trim().split(`\n`);
-  } catch (error) {
-    console.error(chalk.red(error));
-    return [];
-  }
-};
 
 module.exports = {
   name: `--generate`,

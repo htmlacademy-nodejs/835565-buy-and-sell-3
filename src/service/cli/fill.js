@@ -1,11 +1,11 @@
 'use strict';
 
+const {getRandomNum, readContent} = require(`../../utils/utils-common`);
 const {
   generateOffersForDB,
   generateQueryToFillDB,
   generateQueryToGetDataFromDB,
-  getRandomNum,
-} = require(`../../utils`);
+} = require(`../../utils/utils-data`);
 
 const {
   DEFAULT_COUNT,
@@ -37,16 +37,6 @@ const mockUsers = [
     avatar: `avatar2.jpg`
   }
 ];
-
-const readContent = async (filePath) => {
-  try {
-    const content = await fs.readFile(filePath, `utf8`);
-    return content.trim().split(`\n`);
-  } catch (error) {
-    console.error(chalk.red(error));
-    return [];
-  }
-};
 
 module.exports = {
   name: `--fill`,
