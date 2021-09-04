@@ -12,7 +12,8 @@ const define = (sequelize) => Comment.init({
 }, {
   sequelize,
   modelName: `Comment`,
-  tableName: `comments`
+  tableName: `comments`,
+  paranoid: true
 });
 
 module.exports = define;

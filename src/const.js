@@ -1,38 +1,47 @@
 'use strict';
 
+// Cli
 const DEFAULT_COUNT = 1;
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const DEFAULT_PORT_SERVER = 3000;
-const DEFAULT_PORT_FRONT = 8080;
-const FILE_NAME = `mocks.json`;
-const DB_FILL_FILE_PATH = `./sql/fill-db.sql`;
-const DB_QUERIES_FILE_PATH = `./sql/queries.sql`;
-const FILE_PATH = `./mocks.json`;
-const NOT_FOUND_MESSAGE = `NOT FOUND!`;
-const MAX_ID_LENGTH = 10;
 const API_PREFIX = `/api`;
-const TIMEOUT = 1000;
-const PUBLIC_DIR = `public`;
-const UPLOAD_DIR = `upload`;
-const UPLOAD_PATH = `../upload/img/`;
-const LOG_FILE_PATH = `../../../logs/api.log`;
-const TEMPLATES_DIR = `templates`;
-const MAX_UPLOAD_FILE_SIZE = 1048576;
+const NOT_FOUND_MESSAGE = `NOT FOUND!`;
 const DESCRIPTION_CHAR_LENGTH = 1000;
 
-const OFFER_TITLES_PATH = `./src/data/titles.txt`;
-const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
-const OFFER_CATEGORIES_PATH = `./src/data/categories.txt`;
-const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
-
-const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
-const defaultCommentKeys = [`text`];
+const ExitCode = {
+  SUCCESS: 0,
+  ERROR: 1,
+};
 
 const Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
 };
+
+// File names and paths
+const FILE_NAME = `mocks.json`;
+const DB_FILL_FILE_PATH = `./sql/fill-db.sql`;
+const DB_QUERIES_FILE_PATH = `./sql/queries.sql`;
+const FILE_PATH = `./mocks.json`;
+const PUBLIC_DIR = `public`;
+const UPLOAD_DIR = `upload`;
+const UPLOAD_PATH = `../upload/img/`;
+const LOG_FILE_PATH = `../../../logs/api.log`;
+const TEMPLATES_DIR = `templates`;
+const OFFER_TITLES_PATH = `./src/data/titles.txt`;
+const OFFER_DESCRIPTIONS_PATH = `./src/data/descriptions.txt`;
+const OFFER_CATEGORIES_PATH = `./src/data/categories.txt`;
+const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
+
+// Front
+const DEFAULT_PORT_FRONT = 8080;
+const MAX_ID_LENGTH = 10;
+const TIMEOUT = 1000;
+const MAX_UPLOAD_FILE_SIZE = 1048576;
+
+const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
+const defaultCommentKeys = [`text`];
 
 const HttpCode = {
   OK: 200,
@@ -42,10 +51,23 @@ const HttpCode = {
   SERVER_ERROR: 500,
 };
 
-const ExitCode = {
-  SUCCESS: 0,
-  ERROR: 1,
-};
+// Mocks
+const mockUsers = [
+  {
+    email: `ivanov@example.com`,
+    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf95`,
+    firstName: `Иван`,
+    lastName: `Иванов`,
+    avatar: `avatar1.jpg`
+  },
+  {
+    email: `petrov@example.com`,
+    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf93`,
+    firstName: `Пётр`,
+    lastName: `Петров`,
+    avatar: `avatar2.jpg`
+  }
+];
 
 const DaysGap = {
   MIN: 1,
@@ -88,34 +110,43 @@ const CommentsSentencesNum = {
 };
 
 module.exports = {
+  // Cli
   DEFAULT_COUNT,
   DEFAULT_COMMAND,
   USER_ARGV_INDEX,
   DEFAULT_PORT_SERVER,
-  DEFAULT_PORT_FRONT,
+  API_PREFIX,
+  NOT_FOUND_MESSAGE,
+  DESCRIPTION_CHAR_LENGTH,
+  ExitCode,
+  Env,
+
+  // File names and paths
   FILE_NAME,
   DB_FILL_FILE_PATH,
   DB_QUERIES_FILE_PATH,
   FILE_PATH,
-  NOT_FOUND_MESSAGE,
-  MAX_ID_LENGTH,
-  API_PREFIX,
-  TIMEOUT,
   PUBLIC_DIR,
   UPLOAD_DIR,
   UPLOAD_PATH,
   LOG_FILE_PATH,
   TEMPLATES_DIR,
-  MAX_UPLOAD_FILE_SIZE,
   OFFER_TITLES_PATH,
   OFFER_DESCRIPTIONS_PATH,
   OFFER_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
-  DESCRIPTION_CHAR_LENGTH,
+
+  // Front
+  DEFAULT_PORT_FRONT,
+  MAX_ID_LENGTH,
+  TIMEOUT,
+  MAX_UPLOAD_FILE_SIZE,
   defaultOfferKeys,
   defaultCommentKeys,
   HttpCode,
-  ExitCode,
+
+  // Mocks
+  mockUsers,
   DaysGap,
   PriceLimit,
   OfferType,
@@ -124,5 +155,4 @@ module.exports = {
   CategoriesNum,
   CommentsNum,
   CommentsSentencesNum,
-  Env,
 };

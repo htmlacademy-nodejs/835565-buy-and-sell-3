@@ -14,9 +14,7 @@ const define = (sequelize) => Offer.init({
     type: DataTypes.DATE,
     allowNull: false
   },
-  picture: {
-    type: DataTypes.STRING
-  },
+  picture: DataTypes.STRING,
   description: {
     // eslint-disable-next-line new-cap
     type: DataTypes.STRING(DESCRIPTION_CHAR_LENGTH),
@@ -32,7 +30,8 @@ const define = (sequelize) => Offer.init({
 }, {
   sequelize,
   modelName: `Offer`,
-  tableName: `offers`
+  tableName: `offers`,
+  paranoid: true
 });
 
 module.exports = define;
