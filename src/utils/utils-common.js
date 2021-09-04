@@ -45,10 +45,25 @@ const readContent = async (filePath) => {
   }
 };
 
+const getRandomSubarray = (items) => {
+  items = items.slice();
+  let count = getRandomNum(1, items.length - 1);
+  const result = [];
+  while (count--) {
+    result.push(
+        ...items.splice(
+            getRandomNum(0, items.length - 1), 1
+        )
+    );
+  }
+  return result;
+};
+
 module.exports = {
   getRandomNum,
   getRandomDate,
   shuffle,
   getImgFileName,
   readContent,
+  getRandomSubarray,
 };

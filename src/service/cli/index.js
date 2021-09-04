@@ -5,6 +5,7 @@ const generate = require(`./generate`);
 const version = require(`./version`);
 const server = require(`./server`);
 const fill = require(`./fill`);
+const filldb = require(`./filldb`);
 
 const MocksGenerator = {
   [generate.name]: generate,
@@ -12,6 +13,7 @@ const MocksGenerator = {
   [help.name]: help,
   [server.name]: server,
   [fill.name]: fill,
+  [filldb.name]: filldb,
 };
 
 module.exports = {MocksGenerator};

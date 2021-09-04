@@ -17,7 +17,8 @@ const {
   shuffle,
   getRandomNum,
   getImgFileName,
-  getRandomDate
+  getRandomDate,
+  getRandomSubarray
 } = require(`./utils-common`);
 
 
@@ -61,15 +62,7 @@ const generateCommentsForDB = (count, offerId, usersCount, comments) => (
   }))
 );
 
-const getRandomCategoriesId = (categoriesNum, categoriesCount) => {
-  const categories = [];
-  for (let i = 0; i < categoriesNum; i++) {
-    categories.push(getRandomNum(1, categoriesCount));
-  }
-  return categories;
-};
-
-const generateOffersForDB = (count, {titles, descriptions, commentSentences, categoriesCount, mockUsersCount}) => {
+const generateOffersForDB = (count, {titles, descriptions, commentSentences, categories, mockUsersCount}) => {
   return Array(count).fill({}).map((_, index) => ({
     title: titles[getRandomNum(0, titles.length - 1)],
     date: getRandomDate(),
@@ -77,7 +70,7 @@ const generateOffersForDB = (count, {titles, descriptions, commentSentences, cat
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    categories: getRandomCategoriesId(getRandomNum(CategoriesNum.MIN, CategoriesNum.MAX), categoriesCount),
+    categories: getRandomSubarray(categories),
     userId: getRandomNum(1, mockUsersCount),
     comments: generateCommentsForDB(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), index + 1, mockUsersCount, commentSentences),
   }));
