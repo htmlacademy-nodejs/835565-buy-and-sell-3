@@ -1,20 +1,24 @@
 'use strict';
 
+const {Op} = require(`sequelize`);
+const Aliase = require(`../models/aliase`);
+
 class SearchService {
-  constructor(offers) {
-    this._offers = offers;
+  constructor(sequelize) {
+    this._Offer = sequelize.models.Offer;
   }
 
-  findAll(searchText) {
-    const offers = this._offers.reduce((acc, currentOffer) => {
-      const formattedOfferTitle = currentOffer.title.toLowerCase();
-      if (formattedOfferTitle.includes(searchText.toLowerCase())) {
-        acc.push(currentOffer);
-      }
-      return acc;
-    }, []);
+  async findAll(searchText) {
+    const offers = await this._Offer.findAll({
+      where: {
+        title: {
+          [Op.substring]: searchText
+        }
+      },
+      include: [Aliase.CATEGORIES],
+    });
 
-    return offers;
+    return offers.map((offer) => offer.get());
   }
 }
 

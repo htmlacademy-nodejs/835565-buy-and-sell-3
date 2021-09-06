@@ -12,8 +12,9 @@ module.exports = (app, offerService, commentService) => {
 
   app.use(`/offers`, offersRoute);
 
-  offersRoute.get(`/`, (req, res) => {
-    const offers = offerService.findAll();
+  offersRoute.get(`/`, async (req, res) => {
+    const {comments} = req.query;
+    let offers = await offerService.findAll(comments);
     if (!offers) {
       res.status(HttpCode.NOT_FOUND)
         .send(`NOT FOUND`);

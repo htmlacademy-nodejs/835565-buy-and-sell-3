@@ -1,14 +1,12 @@
 'use strict';
 
-const {getCategories} = require(`../../utils/utils-data`);
-
 class CategoryService {
-  constructor(offers) {
-    this._offers = offers;
+  constructor(sequelize) {
+    this._Category = sequelize.models.Category;
   }
 
   findAll() {
-    return getCategories(this._offers);
+    return this._Category.findAll({raw: true});
   }
 }
 
