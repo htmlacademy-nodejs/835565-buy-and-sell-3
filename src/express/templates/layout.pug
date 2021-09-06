@@ -13,6 +13,9 @@ html(lang='ru')
     mixin ticketLabel(type)
       span(class!=attributes.class || `ticket-card__label`) #{type === `OFFER` ? `Куплю` : `Продам`}
 
+    mixin ticketAction(type)
+      p(class!=attributes.class || `ticket__action`) #{type === `OFFER` ? `Куплю` : `Продам`}
+
     mixin categoryImage(category)
       -
         const idPadded = `0${getRandomInt(6)}`

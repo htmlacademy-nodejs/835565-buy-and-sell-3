@@ -39,6 +39,7 @@ const DEFAULT_PORT_FRONT = 8080;
 const MAX_ID_LENGTH = 10;
 const TIMEOUT = 1000;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
+const DATE_FORMAT = `DD MMMM YYYY`;
 
 const defaultOfferKeys = [`title`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`];
@@ -141,6 +142,7 @@ module.exports = {
   MAX_ID_LENGTH,
   TIMEOUT,
   MAX_UPLOAD_FILE_SIZE,
+  DATE_FORMAT,
   defaultOfferKeys,
   defaultCommentKeys,
   HttpCode,

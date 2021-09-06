@@ -59,6 +59,10 @@ const getRandomSubarray = (items) => {
   return result;
 };
 
+const humanizeDate = (format, date) => {
+  return dayjs(date).format(format);
+};
+
 module.exports = {
   getRandomNum,
   getRandomDate,
@@ -66,4 +70,5 @@ module.exports = {
   getImgFileName,
   readContent,
   getRandomSubarray,
+  humanizeDate,
 };

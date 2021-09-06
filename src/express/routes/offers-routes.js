@@ -4,14 +4,20 @@ const {Router} = require(`express`);
 const multer = require(`multer`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH, UPLOAD_PATH, MAX_UPLOAD_FILE_SIZE} = require(`../../const`);
+const {MAX_ID_LENGTH, UPLOAD_PATH, MAX_UPLOAD_FILE_SIZE, DATE_FORMAT} = require(`../../const`);
 const {getLogger} = require(`../../service/lib/logger`);
+const {humanizeDate} = require(`../../utils/utils-common`);
 
 const api = require(`../api`).getAPI();
 const offersRouter = new Router();
 
 const logger = getLogger({name: `front-api`});
 const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_PATH);
+
+const utils = {
+  humanizeDate,
+  DATE_FORMAT,
+};
 
 const storage = multer.diskStorage({
   destination: uploadDirAbsolute,
@@ -28,7 +34,10 @@ const upload = multer({
 }).single(`avatar`);
 
 
-offersRouter.get(`/add`, (req, res) => res.render(`offers/new-ticket`));
+offersRouter.get(`/add`, async (req, res) => {
+  const categories = await api.getCategories();
+  res.render(`offers/new-ticket`, {categories});
+});
 
 offersRouter.get(`/category/:id`, (req, res) => res.render(`offers/category`));
 
@@ -41,18 +50,23 @@ offersRouter.get(`/edit/:id`, async (req, res) => {
   res.render(`offers/ticket-edit`, {offer, categories});
 });
 
-offersRouter.get(`/:id`, (req, res) => res.render(`offers/ticket`));
+offersRouter.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const offer = await api.getOffer(id, true);
+  res.render(`offers/ticket`, {offer, ...utils});
+});
 
 offersRouter.post(`/add`, async (req, res) => {
+  const categories = await api.getCategories();
   upload(req, res, async (err) => {
     if (err) {
       const errorMessage = err.message;
       if (err instanceof multer.MulterError) {
-        res.render(`offers/new-ticket`, {errorMessage});
+        res.render(`offers/new-ticket`, {categories, errorMessage});
         return;
       } else {
         logger.error(`Unknown error on file upload: ${errorMessage}`);
-        res.render(`offers/new-ticket`, {errorMessage});
+        res.render(`offers/new-ticket`, {categories, errorMessage});
         return;
       }
     }

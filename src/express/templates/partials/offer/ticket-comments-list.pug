@@ -1,3 +1,11 @@
 block content
   ul.comments-list
-    include ticket-comment-item.pug
+    each comment in offer.comments
+      li
+        .comment-card
+          .comment-card__header
+            a.comment-card__avatar.avatar(href='#')
+              img(src='../img/avatar02.jpg' srcset='../img/avatar02@2x.jpg 2x' alt='Аватар пользователя')
+            p.comment-card__author Георгий Шпиц
+          .comment-card__content
+            p  #{comment.text}
