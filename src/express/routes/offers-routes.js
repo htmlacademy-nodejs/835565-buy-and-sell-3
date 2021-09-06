@@ -64,7 +64,7 @@ offersRouter.post(`/add`, async (req, res) => {
       picture: file.filename,
       description: body.comment,
       sum: body.price,
-      categories: Array.isArray(body.categories) ? body.categories : [body.categories],
+      categories: body.categories,
     };
 
     try {
