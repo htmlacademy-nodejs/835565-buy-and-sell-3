@@ -1,8 +1,6 @@
 'use strict';
 
 const sequelize = require(`../lib/sequelize`);
-const defineModels = require(`../models`);
-const Aliase = require(`../models/aliase`);
 
 const {getLogger} = require(`../lib/logger`);
 const {readContent} = require(`../../utils/utils-common`);
@@ -17,6 +15,7 @@ const {
   ExitCode,
   mockUsers
 } = require(`../../const`);
+const initDB = require(`../lib/init-db`);
 
 const logger = getLogger({name: `fill-db`});
 
@@ -35,32 +34,21 @@ module.exports = {
     }
     logger.info(`Connection to database established`);
 
-    const {Category, Offer} = defineModels(sequelize);
-
-    await sequelize.sync({force: true});
-
-    const titles = await readContent(OFFER_TITLES_PATH);
-    const descriptions = await readContent(OFFER_DESCRIPTIONS_PATH);
+    // const titles = await readContent(OFFER_TITLES_PATH);
+    // const descriptions = await readContent(OFFER_DESCRIPTIONS_PATH);
+    // const commentSentences = await readContent(FILE_COMMENTS_PATH);
     const categories = await readContent(OFFER_CATEGORIES_PATH);
-    const commentSentences = await readContent(FILE_COMMENTS_PATH);
-
-    const categoryModels = await Category.bulkCreate(
-        categories.map((item) => ({name: item}))
-    );
 
     const options = {
-      titles,
-      descriptions,
-      commentSentences,
-      categories: categoryModels,
+      titles: await readContent(OFFER_TITLES_PATH),
+      descriptions: await readContent(OFFER_DESCRIPTIONS_PATH),
+      commentSentences: await readContent(FILE_COMMENTS_PATH),
+      categories,
       mockUsersCount: mockUsers.length,
     };
 
     const offers = generateOffersForDB(offersCount, options);
-    const offerPromises = offers.map(async (offer) => {
-      const offerModel = await Offer.create(offer, {include: [Aliase.COMMENTS]});
-      await offerModel.addCategories(offer.categories);
-    });
-    await Promise.all(offerPromises);
+
+    initDB(sequelize, {offers, categories});
   }
 };
