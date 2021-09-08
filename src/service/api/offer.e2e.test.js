@@ -2,38 +2,44 @@
 
 const express = require(`express`);
 const request = require(`supertest`);
+const Sequelize = require(`sequelize`);
 
 const offer = require(`./offer`);
 const OfferService = require(`../data-service/offer-service`);
 const CommentService = require(`../data-service/comment-service`);
 const {getRandomNum} = require(`../../utils/utils-common`);
 const {HttpCode} = require(`../../const`);
-const {mockData} = require(`./offer.e2e.test-mocks`);
+const {mockData, mockCategories} = require(`./offer.e2e.test-mocks`);
+const initDB = require(`../lib/init-db`);
 
-const createAPI = () => {
+const createAPI = async () => {
+  const mockDB = new Sequelize(`sqlite::memory:`, {logging: false});
+  await initDB(mockDB, {categories: mockCategories, offers: mockData});
+
   const app = express();
-  const cloneData = JSON.parse(JSON.stringify(mockData));
   app.use(express.json());
-  offer(app, new OfferService(cloneData), new CommentService());
+  offer(app, new OfferService(mockDB), new CommentService(mockDB));
   return app;
 };
 
 const newOffer = {
-  categories: `Котики`,
+  id: 1,
   title: `Дам погладить котика`,
-  description: `Дам погладить котика. Дорого. Не гербалайф`,
+  date: `2021-08-21T21:19:10+03:00`,
+  description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
   picture: `cat.jpg`,
   type: `OFFER`,
-  sum: 100500
+  sum: 100500,
+  categories: [1, 2]
 };
 
 describe(`Offers API.`, () => {
 
-  describe(`Offers API returns a list of all offers.`, () => {
-    const app = createAPI();
+  describe(`Offers API returns a list of all offers:`, () => {
     let response;
 
     beforeAll(async () => {
+      const app = await createAPI();
       response = await request(app)
         .get(`/offers`);
     });
@@ -44,20 +50,22 @@ describe(`Offers API.`, () => {
       expect(response.body.length).toBe(mockData.length)
     );
 
-    test(`Received items should match mock offers by ID`, () => {
+    test(`Received items should match mock offers by title`, () => {
       const randomOfferIndex = getRandomNum(0, mockData.length - 1);
-      expect(response.body[randomOfferIndex].id).toBe(mockData[randomOfferIndex].id);
+      expect(response.body[randomOfferIndex].title).toBe(mockData[randomOfferIndex].title);
     });
   });
 
   describe(`Offers API returns an offer with given id.`, () => {
-    const app = createAPI();
     let response;
-    const requestedMockOffer = mockData[(getRandomNum(0, mockData.length - 1))];
+    let app;
+    const requestedMockOfferId = getRandomNum(1, mockData.length);
+    const requestedMockOffer = mockData[requestedMockOfferId - 1];
 
     beforeAll(async () => {
+      app = await createAPI();
       response = await request(app)
-        .get(`/offers/${requestedMockOffer.id}`);
+        .get(`/offers/${requestedMockOfferId}`);
     });
 
     test(`Received status 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
@@ -67,6 +75,7 @@ describe(`Offers API.`, () => {
     );
 
     test(`Received status 404 if unexisting offer is requested`, async () => {
+      app = await createAPI();
       response = await request(app)
         .get(`/offers/unext`);
       expect(response.statusCode).toBe(HttpCode.NOT_FOUND);
@@ -74,24 +83,27 @@ describe(`Offers API.`, () => {
   });
 
   describe(`Offers API creates an offer if data is valid.`, () => {
-    const app = createAPI();
+    let app;
     let response;
+    const validOffer = {
+      id: 4,
+      title: `Дам погладить котика`,
+      date: `2021-08-21T21:19:10+03:00`,
+      description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
+      picture: `cat.jpg`,
+      type: `OFFER`,
+      sum: 100500,
+      categories: [1, 2]
+    };
 
     beforeAll(async () => {
+      app = await createAPI();
       response = await request(app)
         .post(`/offers`)
-        .send(newOffer);
+        .send(validOffer);
     });
 
     test(`Received status 201`, () => expect(response.statusCode).toBe(HttpCode.CREATED));
-
-    test(`Returns offer created`, () =>
-      expect(response.body).toMatchObject(newOffer)
-    );
-
-    test(`Received offer should contain ID`, () =>
-      expect(response.body).toHaveProperty(`id`)
-    );
 
     test(`Offers count should increace after adding new offer`, async () => {
       response = await request(app)
@@ -101,7 +113,11 @@ describe(`Offers API.`, () => {
   });
 
   describe(`Offers API does not create offer if data is invalid.`, () => {
-    const app = createAPI();
+    let app;
+
+    beforeAll(async () => {
+      app = await createAPI();
+    });
 
     test(`Unvalidated offer post should receive status 400`, async () => {
       for (const key of Object.keys(newOffer)) {
@@ -116,45 +132,48 @@ describe(`Offers API.`, () => {
   });
 
   describe(`Offers API changes an offer.`, () => {
-    const app = createAPI();
     let response;
-    const updatedMockOffer = mockData[getRandomNum(0, mockData.length - 1)];
+    let app;
 
     beforeAll(async () => {
+      app = await createAPI();
       response = await request(app)
-        .put(`/offers/${updatedMockOffer.id}`)
+        .put(`/offers/${newOffer.id}`)
         .send(newOffer);
     });
 
     test(`Received status 200`, () => expect(response.statusCode).toBe(HttpCode.OK));
 
-    test(`Returns changed offer`, () => expect(response.body).toMatchObject(newOffer));
-
     test(`Offer should be updated`, async () => {
       response = await request(app)
-        .get(`/offers/${updatedMockOffer.id}`);
+        .get(`/offers/${newOffer.id}`);
       expect(response.body.title).toBe(newOffer.title);
     });
+  });
 
-    test(`Trying to change unexisting offer should receive status 404`, () => {
-      return request(app)
-        .put(`/offers/unexst`)
-        .send(newOffer)
-        .expect(HttpCode.NOT_FOUND);
-    });
 
-    test(`Trying to send invalid offer should receive status 400`, () => {
-      const invalidOffer = {
-        title: `Дам погладить котика`,
-        description: `Дам погладить котика. Дорого. Не гербалайф`,
-        picture: `cat.jpg`,
-        type: `OFFER`,
-      };
-      return request(app)
-        .put(`/offers/${updatedMockOffer.id}`)
-        .send(invalidOffer)
-        .expect(HttpCode.BAD_REQUEST);
-    });
+  test(`Trying to change unexisting offer should receive status 404`, async () => {
+    const app = await createAPI();
+
+    return request(app)
+      .put(`/offers/unexist`)
+      .send(newOffer)
+      .expect(HttpCode.NOT_FOUND);
+  });
+
+  test(`Trying to send invalid offer should receive status 400`, async () => {
+    const app = await createAPI();
+    const updatedMockOfferId = 1;
+    const invalidOffer = {
+      title: `Дам погладить котика`,
+      description: `Дам погладить котика. Дорого. Не гербалайф`,
+      picture: `cat.jpg`,
+      type: `OFFER`,
+    };
+    return await request(app)
+      .put(`/offers/${updatedMockOfferId}`)
+      .send(invalidOffer)
+      .expect(HttpCode.BAD_REQUEST);
   });
 });
 
