@@ -41,7 +41,7 @@ const TIMEOUT = 1000;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
 const DATE_FORMAT = `DD MMMM YYYY`;
 
-const defaultOfferKeys = [`id`, `title`, `createdAt`, `picture`, `description`, `type`, `sum`, `categories`];
+const defaultOfferKeys = [`title`, `createdAt`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`, `createdAt`];
 
 const HttpCode = {

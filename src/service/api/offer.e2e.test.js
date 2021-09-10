@@ -23,7 +23,6 @@ const createAPI = async () => {
 };
 
 const newOffer = {
-  id: 1,
   title: `Дам погладить котика`,
   createdAt: `2021-08-21T21:19:10+03:00`,
   description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
@@ -86,7 +85,6 @@ describe(`Offers API.`, () => {
     let app;
     let response;
     const validOffer = {
-      id: 4,
       title: `Дам погладить котика`,
       createdAt: `2021-08-21T21:19:10+03:00`,
       description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
@@ -138,7 +136,7 @@ describe(`Offers API.`, () => {
     beforeAll(async () => {
       app = await createAPI();
       response = await request(app)
-        .put(`/offers/${newOffer.id}`)
+        .put(`/offers/1`)
         .send(newOffer);
     });
 
@@ -146,7 +144,7 @@ describe(`Offers API.`, () => {
 
     test(`Offer should be updated`, async () => {
       response = await request(app)
-        .get(`/offers/${newOffer.id}`);
+        .get(`/offers/1`);
       expect(response.body.title).toBe(newOffer.title);
     });
   });
