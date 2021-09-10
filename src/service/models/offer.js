@@ -10,10 +10,6 @@ const define = (sequelize) => Offer.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
   picture: DataTypes.STRING,
   description: {
     // eslint-disable-next-line new-cap

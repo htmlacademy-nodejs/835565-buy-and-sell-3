@@ -26,6 +26,7 @@ const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     text: shuffle(comments).slice(0, getRandomNum(CommentsSentencesNum.MIN, CommentsSentencesNum.MAX)).join(` `),
+    createdAt: getRandomDate()
   }));
 };
 
@@ -33,7 +34,7 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     title: titles[getRandomNum(0, titles.length - 1)],
-    date: getRandomDate(),
+    createdAt: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
@@ -43,15 +44,6 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   }));
 };
 
-const getCategories = (items) => {
-  const categories = items.reduce((acc, currentItem) => {
-    currentItem.categories.forEach((categoryItem) => acc.add(categoryItem));
-    return acc;
-  }, new Set());
-
-  return [...categories];
-};
-
 const generateCommentsForDB = (count, offerId, usersCount, comments) => (
   Array(count).fill({}).map(() => ({
     userId: getRandomNum(1, usersCount),
@@ -59,13 +51,14 @@ const generateCommentsForDB = (count, offerId, usersCount, comments) => (
     text: shuffle(comments)
       .slice(0, getRandomNum(CommentsSentencesNum.MIN, CommentsSentencesNum.MAX))
       .join(` `),
+    createdAt: getRandomDate()
   }))
 );
 
 const generateOffersForDB = (count, {titles, descriptions, commentSentences, categories, mockUsersCount}) => {
   return Array(count).fill({}).map((_, index) => ({
     title: titles[getRandomNum(0, titles.length - 1)],
-    date: getRandomDate(),
+    createdAt: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
@@ -196,7 +189,6 @@ WHERE id = ${updatedOfferId}`;
 
 module.exports = {
   generateOffers,
-  getCategories,
   generateOffersForDB,
   generateQueryToFillDB,
   generateQueryToGetDataFromDB,

@@ -25,7 +25,7 @@ const createAPI = async () => {
 const newOffer = {
   id: 1,
   title: `Дам погладить котика`,
-  date: `2021-08-21T21:19:10+03:00`,
+  createdAt: `2021-08-21T21:19:10+03:00`,
   description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
   picture: `cat.jpg`,
   type: `OFFER`,
@@ -88,7 +88,7 @@ describe(`Offers API.`, () => {
     const validOffer = {
       id: 4,
       title: `Дам погладить котика`,
-      date: `2021-08-21T21:19:10+03:00`,
+      createdAt: `2021-08-21T21:19:10+03:00`,
       description: `Дам погладить котика. Дорого. Не гербалайф. К лотку приучен.`,
       picture: `cat.jpg`,
       type: `OFFER`,
