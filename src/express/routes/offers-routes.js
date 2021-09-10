@@ -79,6 +79,7 @@ offersRouter.post(`/add`, async (req, res) => {
       description: body.comment,
       sum: body.price,
       categories: body.categories,
+      createdAt: new Date(),
     };
 
     try {
