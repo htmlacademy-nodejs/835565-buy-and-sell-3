@@ -12,8 +12,9 @@ module.exports = (app, offerService, commentService) => {
 
   app.use(`/offers`, offersRoute);
 
-  offersRoute.get(`/`, (req, res) => {
-    const offers = offerService.findAll();
+  offersRoute.get(`/`, async (req, res) => {
+    const {comments} = req.query;
+    let offers = await offerService.findAll(comments);
     if (!offers) {
       res.status(HttpCode.NOT_FOUND)
         .send(`NOT FOUND`);
@@ -22,9 +23,10 @@ module.exports = (app, offerService, commentService) => {
       .json(offers);
   });
 
-  offersRoute.get(`/:offerId`, (req, res) => {
+  offersRoute.get(`/:offerId`, async (req, res) => {
     const {offerId} = req.params;
-    const offer = offerService.findOne(offerId);
+    const {comments} = req.query;
+    const offer = await offerService.findOne(offerId, comments);
     if (!offer) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Unable to find offer with id:${offerId}`);

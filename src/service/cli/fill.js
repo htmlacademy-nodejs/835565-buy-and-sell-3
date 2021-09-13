@@ -1,11 +1,11 @@
 'use strict';
 
+const {getRandomNum, readContent} = require(`../../utils/utils-common`);
 const {
   generateOffersForDB,
   generateQueryToFillDB,
   generateQueryToGetDataFromDB,
-  getRandomNum,
-} = require(`../../utils`);
+} = require(`../../utils/utils-data`);
 
 const {
   DEFAULT_COUNT,
@@ -16,37 +16,11 @@ const {
   FILE_COMMENTS_PATH,
   DB_QUERIES_FILE_PATH,
   ExitCode,
+  mockUsers,
 } = require(`../../const`);
 
 const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
-
-const mockUsers = [
-  {
-    email: `ivanov@example.com`,
-    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf95`,
-    firstName: `Иван`,
-    lastName: `Иванов`,
-    avatar: `avatar1.jpg`
-  },
-  {
-    email: `petrov@example.com`,
-    passwordHash: `5f4dcc3b5aa765d61d8327deb882cf93`,
-    firstName: `Пётр`,
-    lastName: `Петров`,
-    avatar: `avatar2.jpg`
-  }
-];
-
-const readContent = async (filePath) => {
-  try {
-    const content = await fs.readFile(filePath, `utf8`);
-    return content.trim().split(`\n`);
-  } catch (error) {
-    console.error(chalk.red(error));
-    return [];
-  }
-};
 
 module.exports = {
   name: `--fill`,
@@ -110,7 +84,6 @@ module.exports = {
     };
 
     const contentToFill = generateQueryToFillDB(valuesToFill);
-
     const contentToGetData = generateQueryToGetDataFromDB(valuesToGetData);
 
     try {

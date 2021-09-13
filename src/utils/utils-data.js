@@ -1,50 +1,32 @@
 'use strict';
 
-const dayjs = require(`dayjs`);
 const {nanoid} = require(`nanoid`);
+
 const {
-  MAX_ID_LENGTH,
-  PriceLimit,
-  OfferType,
+  CommentsSentencesNum,
   ImgTitleIndex,
   OfferSentencesNum,
-  CommentsNum,
-  CommentsSentencesNum,
+  PriceLimit,
   CategoriesNum,
-  DaysGap,
-} = require(`./const`);
+  CommentsNum,
+  OfferType,
+  MAX_ID_LENGTH
+} = require(`../const`);
 
-const getRandomNum = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+const {
+  shuffle,
+  getRandomNum,
+  getImgFileName,
+  getRandomDate,
+  getRandomSubarray
+} = require(`./utils-common`);
 
-const getRandomDate = () => {
-  const randomDaysGap = getRandomNum(DaysGap.MIN, DaysGap.MAX);
-  return dayjs().add(-randomDaysGap, `day`).format();
-};
-
-const shuffle = (someArray) => {
-  for (let i = someArray.length - 1; i > 0; i--) {
-    const randomPosition = Math.floor(Math.random() * i);
-    [someArray[i], someArray[randomPosition]] = [someArray[randomPosition], someArray[i]];
-  }
-  return someArray;
-};
-
-const getImgFileName = (num) => {
-  return (
-    num < 10
-      ? `0${num}`
-      : `${num}`
-  );
-};
 
 const generateComments = (count, comments) => {
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     text: shuffle(comments).slice(0, getRandomNum(CommentsSentencesNum.MIN, CommentsSentencesNum.MAX)).join(` `),
+    createdAt: getRandomDate()
   }));
 };
 
@@ -52,7 +34,7 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   return Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     title: titles[getRandomNum(0, titles.length - 1)],
-    date: getRandomDate(),
+    createdAt: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
@@ -62,15 +44,6 @@ const generateOffers = (count, {titles, descriptions, categories, comments}) => 
   }));
 };
 
-const getCategories = (items) => {
-  const categories = items.reduce((acc, currentItem) => {
-    currentItem.categories.forEach((categoryItem) => acc.add(categoryItem));
-    return acc;
-  }, new Set());
-
-  return [...categories];
-};
-
 const generateCommentsForDB = (count, offerId, usersCount, comments) => (
   Array(count).fill({}).map(() => ({
     userId: getRandomNum(1, usersCount),
@@ -78,26 +51,19 @@ const generateCommentsForDB = (count, offerId, usersCount, comments) => (
     text: shuffle(comments)
       .slice(0, getRandomNum(CommentsSentencesNum.MIN, CommentsSentencesNum.MAX))
       .join(` `),
+    createdAt: getRandomDate()
   }))
 );
 
-const getRandomCategoriesId = (categoriesNum, categoriesCount) => {
-  const categories = [];
-  for (let i = 0; i < categoriesNum; i++) {
-    categories.push(getRandomNum(1, categoriesCount));
-  }
-  return categories;
-};
-
-const generateOffersForDB = (count, {titles, descriptions, commentSentences, categoriesCount, mockUsersCount}) => {
+const generateOffersForDB = (count, {titles, descriptions, commentSentences, categories, mockUsersCount}) => {
   return Array(count).fill({}).map((_, index) => ({
     title: titles[getRandomNum(0, titles.length - 1)],
-    date: getRandomDate(),
+    createdAt: getRandomDate(),
     picture: `item${getImgFileName(getRandomNum(ImgTitleIndex.MIN, ImgTitleIndex.MAX))}.jpg`,
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    categories: getRandomCategoriesId(getRandomNum(CategoriesNum.MIN, CategoriesNum.MAX), categoriesCount),
+    categories: getRandomSubarray(categories),
     userId: getRandomNum(1, mockUsersCount),
     comments: generateCommentsForDB(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), index + 1, mockUsersCount, commentSentences),
   }));
@@ -132,9 +98,14 @@ ${commentValues};
 ALTER TABLE comments ENABLE TRIGGER ALL;`;
 };
 
-const generateQueryToGetDataFromDB = (
-    {offerId, newCommentsLimit, commentsOfferId, offersType, offersLimit, updatedOfferId, updatedTitle}
-) => {
+const generateQueryToGetDataFromDB = ({
+  offerId,
+  newCommentsLimit,
+  commentsOfferId,
+  offersType, offersLimit,
+  updatedOfferId,
+  updatedTitle
+}) => {
   return `
 /* Список всех категорий */
 SELECT * FROM categories;
@@ -217,13 +188,7 @@ WHERE id = ${updatedOfferId}`;
 };
 
 module.exports = {
-  getRandomNum,
-  shuffle,
-  getImgFileName,
   generateOffers,
-  generateComments,
-  getCategories,
-  generateCommentsForDB,
   generateOffersForDB,
   generateQueryToFillDB,
   generateQueryToGetDataFromDB,

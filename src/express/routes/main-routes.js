@@ -8,8 +8,11 @@ const mainRouter = new Router();
 const logger = getLogger({name: `front-api`});
 
 mainRouter.get(`/`, async (req, res) => {
-  const offers = await api.getOffers();
-  res.render(`main`, {offers});
+  const [offers, categories] = await Promise.all([
+    await api.getOffers(),
+    await api.getCategories(true)
+  ]);
+  res.render(`main`, {offers, categories});
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`sign-up`));

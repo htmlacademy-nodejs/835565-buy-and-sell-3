@@ -53,16 +53,11 @@ module.exports = {
     const [customPort] = args;
     const port = Number.parseInt(customPort, 10) || DEFAULT_PORT_SERVER;
 
-    try {
-      app.listen(port, (error) => {
-        if (error) {
-          return logger.error(`Error while hosting server: ${error.message}`);
-        }
-        return logger.info(`Listening to port: ${port}`);
-      });
-    } catch (error) {
-      logger.error(`An error occurred: ${error.message}`);
-      throw new Error(`Error while creating server: ${error.message}`);
-    }
+    app.listen(port, (error) => {
+      if (error) {
+        return logger.error(`Error while hosting server: ${error.message}`);
+      }
+      return logger.info(`Listening to port: ${port}`);
+    });
   }
 };

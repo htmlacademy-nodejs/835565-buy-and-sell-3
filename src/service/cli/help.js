@@ -3,6 +3,8 @@
 const chalk = require(`chalk`);
 const version = require(`./version`);
 const generate = require(`./generate`);
+const fill = require(`./fill`);
+const fillDB = require(`./filldb`);
 const server = require(`./server`);
 
 const moduleName = `--help`;
@@ -16,6 +18,8 @@ const helpText = `
     ${version.name}:            выводит номер версии
     ${moduleName}:               печатает этот текст
     ${generate.name} <count>    формирует файл mocks.json
+    ${fill.name} <count>        формирует файлы sql запросов
+    ${fillDB.name} <count>      генерирует данные и заполняет БД
     ${server.name}              запускает http-сервер
 `;
 

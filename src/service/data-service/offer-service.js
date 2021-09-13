@@ -1,43 +1,55 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {MAX_ID_LENGTH} = require(`../../const`);
+const Aliase = require(`../models/aliase`);
 
 class OfferService {
-  constructor(offers) {
-    this._offers = offers;
+  constructor(sequelize) {
+    this._Offer = sequelize.models.Offer;
+    this._Comment = sequelize.models.Comment;
+    this._Category = sequelize.models.Category;
   }
 
-  create(offer) {
-    const newOffer = Object
-      .assign(
-          {id: nanoid(MAX_ID_LENGTH), comments: []},
-          offer
-      );
-    this._offers.push(newOffer);
-    return newOffer;
+  async create(data) {
+    const offer = await this._Offer.create(data);
+    await offer.addCategories(data.categories);
+    return offer.get();
   }
 
-  drop(id) {
-    const offer = this._offers.find((item) => item.id === id);
-    if (!offer) {
-      return null;
+  async drop(id) {
+    const deletedRows = await this._Offer.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
+  }
+
+  findOne(id, needComments) {
+    const include = [Aliase.CATEGORIES];
+    if (needComments) {
+      include.push({
+        model: this._Comment,
+        as: Aliase.COMMENTS,
+      });
     }
-    this._offers = this._offers.filter((item) => item.id !== id);
-    return offer;
+    return this._Offer.findByPk(id, {include});
   }
 
-  findAll() {
-    return this._offers;
+  async findAll(needComments) {
+    const include = [Aliase.CATEGORIES];
+    if (needComments) {
+      include.push(Aliase.COMMENTS);
+    }
+    const offers = await this._Offer.findAll({include});
+    return offers.map((item) => item.get());
   }
 
-  findOne(id) {
-    return this._offers.find((item) => item.id === id);
-  }
-
-  update(id, offer) {
-    const prevOffer = this._offers.find((item) => item.id === id);
-    return Object.assign(prevOffer, offer);
+  async update(id, offer) {
+    const [affectedRows] = await this._Offer.update(
+        offer,
+        {
+          where: {id}
+        }
+    );
+    return !!affectedRows;
   }
 }
 

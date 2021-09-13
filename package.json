@@ -11,7 +11,8 @@
     "start::debug": "cross-env LOG_LEVEL=info NODE_ENV=development nodemon -r dotenv/config ./src/service/service.js --server",
     "generate": "node ./src/service/service.js --generate 10",
     "fill": "node ./src/service/service.js --fill 10",
-    "start-front-server": "nodemon ./src/express/index.js"
+    "filldb": "cross-env NODE_ENV=development node -r dotenv/config ./src/service/service.js --filldb 10",
+    "start-front": "nodemon ./src/express/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "jest": "27.0.4",
     "nodemon": "2.0.7",
     "pino-pretty": "5.0.2",
+    "sqlite3": "5.0.2",
     "supertest": "6.1.3"
   },
   "dependencies": {
