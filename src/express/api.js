@@ -1,9 +1,9 @@
 'use strict';
 
 const axios = require(`axios`);
-const {TIMEOUT} = require(`../const`);
+const {TIMEOUT, DEFAULT_PORT_SERVER} = require(`../const`);
 
-const port = process.env.API_PORT || 3000;
+const port = process.env.API_PORT || DEFAULT_PORT_SERVER;
 const defaultUrl = `http://localhost:${port}/api/`;
 
 class API {

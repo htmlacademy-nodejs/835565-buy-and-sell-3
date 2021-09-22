@@ -22,7 +22,7 @@ class OfferService {
     return !!deletedRows;
   }
 
-  findOne(id, needComments) {
+  async findOne(id, needComments) {
     const include = [Aliase.CATEGORIES];
     if (needComments) {
       include.push({
@@ -30,7 +30,7 @@ class OfferService {
         as: Aliase.COMMENTS,
       });
     }
-    return this._Offer.findByPk(id, {include});
+    return await this._Offer.findByPk(id, {include});
   }
 
   async findAll(needComments) {
