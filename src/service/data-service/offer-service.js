@@ -1,5 +1,6 @@
 'use strict';
 
+const {ORDER_BY_LATEST_DATE} = require(`../../const`);
 const Aliase = require(`../models/aliase`);
 
 class OfferService {
@@ -51,6 +52,20 @@ class OfferService {
     );
     return !!affectedRows;
   }
+
+  async findPage({limit, offset}) {
+    const {count, rows} = await this._Offer.findAndCountAll({
+      limit,
+      offset,
+      include: [Aliase.CATEGORIES],
+      order: [
+        ORDER_BY_LATEST_DATE
+      ],
+      distinct: true
+    });
+    return {count, offers: rows};
+  }
+
 }
 
 module.exports = OfferService;

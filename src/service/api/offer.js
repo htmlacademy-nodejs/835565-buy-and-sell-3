@@ -13,14 +13,15 @@ module.exports = (app, offerService, commentService) => {
   app.use(`/offers`, offersRoute);
 
   offersRoute.get(`/`, async (req, res) => {
-    const {comments} = req.query;
-    let offers = await offerService.findAll(comments);
-    if (!offers) {
-      res.status(HttpCode.NOT_FOUND)
-        .send(`NOT FOUND`);
+    const {offset, limit, comments} = req.query;
+    let result;
+    if (limit || offset) {
+      result = await offerService.findPage({limit, offset});
+    } else {
+      result = await offerService.findAll(comments);
     }
     res.status(HttpCode.OK)
-      .json(offers);
+      .json(result);
   });
 
   offersRoute.get(`/:offerId`, async (req, res) => {

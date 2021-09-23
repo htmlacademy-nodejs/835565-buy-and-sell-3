@@ -1,6 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {OFFERS_PER_PAGE} = require(`../../const`);
 const api = require(`../api`).getAPI();
 const myRouter = new Router();
 
@@ -10,11 +11,25 @@ myRouter.get(`/comments`, async (req, res) => {
 });
 
 myRouter.get(`/`, async (req, res) => {
-  const [offers, categories] = await Promise.all([
-    await api.getOffers(),
+  let {page = 1} = req.query;
+
+  const offset = (page - 1) * OFFERS_PER_PAGE;
+  const limit = OFFERS_PER_PAGE;
+
+  const [{count, offers}, categories] = await Promise.all([
+    await api.getOffers({limit, offset}),
     await api.getCategories()
   ]);
-  res.render(`my-tickets`, {offers, categories});
+
+  const totalPages = Math.ceil(count / OFFERS_PER_PAGE);
+
+  const options = {
+    offers,
+    page,
+    totalPages,
+    categories
+  };
+  res.render(`my-tickets`, {...options});
 });
 
 module.exports = myRouter;

@@ -39,7 +39,8 @@ offersRouter.get(`/add`, async (req, res) => {
   res.render(`offers/new-ticket`, {categories});
 });
 
-offersRouter.get(`/category/:id`, (req, res) => res.render(`offers/category`));
+offersRouter.get(`/category/:id`, (req, res) => res.render(`category`));
+// WIP
 
 offersRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;

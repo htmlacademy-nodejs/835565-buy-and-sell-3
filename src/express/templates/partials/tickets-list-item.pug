@@ -1,17 +1,18 @@
 block content
   li.tickets-list__item
-    .ticket-card.ticket-card--color08
+    .ticket-card.ticket-card--color01
       .ticket-card__img
-        img(src='img/item08.jpg' srcset='img/item08@2x.jpg 2x' alt='Изображение товара')
+        img(src=`img/${offer.picture}` alt=offer.title)
       .ticket-card__info
-        span.ticket-card__label Куплю
+        +ticketLabel(offer.type)
         .ticket-card__categories
-          a(href='#') ЭЛЕКТРОНИКА
+          each category in offer.categories
+            a(href='#') #{category.name}
         .ticket-card__header
           h3.ticket-card__title
-            a(href='#') Фотик Canon
+            a(href='#') #{offer.title}
           p.ticket-card__price
-            span.js-sum 32 000
+            span.js-sum #{offer.sum}
             |  ₽
         .ticket-card__desc
-          p Куплю вот такую итальянскую кофеварку, можно любой фирмы...
+          p #{offer.description}
