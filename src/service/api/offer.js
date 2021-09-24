@@ -13,15 +13,19 @@ module.exports = (app, offerService, commentService) => {
   app.use(`/offers`, offersRoute);
 
   offersRoute.get(`/`, async (req, res) => {
-    const {offset, limit, comments} = req.query;
-    let result;
-    if (limit || offset) {
-      result = await offerService.findPage({limit, offset});
+    const {offset, limit, needComments} = req.query;
+
+    let offers = {};
+
+    if (limit && offset) {
+      offers.current = await offerService.findPage({limit, offset});
     } else {
-      result = await offerService.findAll(comments);
+      offers.recent = await offerService.findLimit({limit});
+      offers.discussed = await offerService.findLimit({limit, needComments: true});
     }
+
     res.status(HttpCode.OK)
-      .json(result);
+      .json(offers);
   });
 
   offersRoute.get(`/:offerId`, async (req, res) => {

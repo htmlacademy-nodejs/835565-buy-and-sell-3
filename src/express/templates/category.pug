@@ -1,9 +1,8 @@
 extends layout.pug
 block content
   main.page-content
-    section.categories-list
-      h1.visually-hidden Сервис объявлений "Куплю - продам"
-      include partials/categories-list.pug
+    if (categories.length > 0)
+      include partials/categories/categories-section.pug
 
     section.tickets-list
       h2.visually-hidden Предложения из категории #{offers.category.name}
@@ -16,7 +15,7 @@ block content
         if (offers.current.length > 0)
           ul
             each offer in offers
-              include partials/tickets-list-item.pug
+              include partials/offers-list-item.pug
         else
           p Объявления отсутствуют
   +pagination(page, totalPages, 2, `?`)
