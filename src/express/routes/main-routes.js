@@ -6,16 +6,21 @@ const api = require(`../api`).getAPI();
 const {getLogger} = require(`../../service/lib/logger`);
 
 const mainRouter = new Router();
-const logger = getLogger({name: `front-api`});
+const logger = getLogger({name: `front-api/main`});
 
 mainRouter.get(`/`, async (req, res) => {
   const limit = OFFERS_PER_PAGE;
 
-  const [offers, categories] = await Promise.all([
-    await api.getOffers({limit}),
-    await api.getCategories(true)
-  ]);
-  res.render(`main`, {offers, categories});
+  try {
+    const [offers, categories] = await Promise.all([
+      await api.getOffers({limit}),
+      await api.getCategories(true)
+    ]);
+    res.render(`main`, {offers, categories});
+  } catch (error) {
+    logger.error(`Error on '/' route: ${error.message}`);
+    res.render(`errors/500`);
+  }
 });
 
 mainRouter.get(`/register`, (req, res) => res.render(`sign-up`));
@@ -44,7 +49,7 @@ mainRouter.get(`/search`, async (req, res) => {
         offers
       });
     } catch (err) {
-      logger.error(`Internal server error occured: ${err.message}`);
+      logger.error(`Error on '/search' route: ${err.message}`);
       res.render(`errors/500`);
     }
   }

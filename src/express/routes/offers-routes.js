@@ -11,7 +11,7 @@ const {humanizeDate} = require(`../../utils/utils-common`);
 const api = require(`../api`).getAPI();
 const offersRouter = new Router();
 
-const logger = getLogger({name: `front-api`});
+const logger = getLogger({name: `front-api/offers`});
 const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_PATH);
 
 const utils = {
@@ -35,8 +35,13 @@ const upload = multer({
 
 
 offersRouter.get(`/add`, async (req, res) => {
-  const categories = await api.getCategories();
-  res.render(`offers/new-ticket`, {categories});
+  try {
+    const categories = await api.getCategories();
+    res.render(`offers/new-ticket`, {categories});
+  } catch (error) {
+    logger.error(`Error on '/offers/add' route: ${error.message}`);
+    res.render(`errors/500`);
+  }
 });
 
 offersRouter.get(`/category/:id`, (req, res) => res.render(`category`));
@@ -44,17 +49,25 @@ offersRouter.get(`/category/:id`, (req, res) => res.render(`category`));
 
 offersRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;
-  const [offer, categories] = await Promise.all([
-    api.getOffer(id),
-    api.getCategories()
-  ]);
-  res.render(`offers/ticket-edit`, {offer, categories});
+  try {
+    const [offer, categories] = await Promise.all([
+      api.getOffer(id),
+      api.getCategories()
+    ]);
+    res.render(`offers/ticket-edit`, {offer, categories});
+  } catch (error) {
+    res.render(`errors/404`);
+  }
 });
 
 offersRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const offer = await api.getOffer(id, true);
-  res.render(`offers/ticket`, {offer, ...utils});
+  try {
+    const offer = await api.getOffer(id, true);
+    res.render(`offers/ticket`, {offer, ...utils});
+  } catch (error) {
+    res.render(`errors/404`);
+  }
 });
 
 offersRouter.post(`/add`, async (req, res) => {
@@ -64,12 +77,11 @@ offersRouter.post(`/add`, async (req, res) => {
       const errorMessage = err.message;
       if (err instanceof multer.MulterError) {
         res.render(`offers/new-ticket`, {categories, errorMessage});
-        return;
       } else {
         logger.error(`Unknown error on file upload: ${errorMessage}`);
         res.render(`offers/new-ticket`, {categories, errorMessage});
-        return;
       }
+      return;
     }
 
     const {body, file} = req;
@@ -87,7 +99,7 @@ offersRouter.post(`/add`, async (req, res) => {
       await api.createOffer(newOfferData);
       res.redirect(`/my`);
     } catch (error) {
-      logger.error(`An error occurred on file upload: ${error.message}`);
+      logger.error(`Unable to create new offer: ${error.message}`);
       res.redirect(`back`);
     }
   });
