@@ -17,6 +17,11 @@ module.exports = (app, offerService, commentService) => {
 
     let offers = {};
 
+    if (needComments) {
+      offers.current = await offerService.findAll({needComments});
+      return res.status(HttpCode.OK).json(offers);
+    }
+
     if (limit && offset) {
       offers.current = await offerService.findPage({limit, offset});
     } else {
@@ -24,8 +29,7 @@ module.exports = (app, offerService, commentService) => {
       offers.discussed = await offerService.findLimit({limit, needComments: true});
     }
 
-    res.status(HttpCode.OK)
-      .json(offers);
+    return res.status(HttpCode.OK).json(offers);
   });
 
   offersRoute.get(`/:offerId`, async (req, res) => {

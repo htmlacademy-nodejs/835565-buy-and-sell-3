@@ -7,7 +7,7 @@ const myRouter = new Router();
 
 myRouter.get(`/comments`, async (req, res) => {
   const offers = await api.getOffers({needComments: true});
-  res.render(`comments`, {offers: offers.slice(0, 3)});
+  res.render(`comments`, {offers});
 });
 
 myRouter.get(`/`, async (req, res) => {
@@ -16,7 +16,7 @@ myRouter.get(`/`, async (req, res) => {
   const offset = (page - 1) * OFFERS_PER_PAGE;
   const limit = OFFERS_PER_PAGE;
 
-  const [{count, offers}, categories] = await Promise.all([
+  const [{current: {count, offers}}, categories] = await Promise.all([
     await api.getOffers({limit, offset}),
     await api.getCategories()
   ]);

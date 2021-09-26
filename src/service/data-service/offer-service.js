@@ -46,11 +46,19 @@ class OfferService {
   }
 
   async findAll(needComments) {
-    const include = [Aliase.CATEGORIES];
+    const options = {
+      include: [Aliase.CATEGORIES],
+      order: [ORDER_BY_LATEST_DATE]
+    };
+
     if (needComments) {
-      include.push(Aliase.COMMENTS);
+      options.include.push(Aliase.COMMENTS);
+      options.order[0] = [
+        {model: this._Comment, as: Aliase.COMMENTS}, `createdAt`, `DESC`
+      ];
     }
-    const offers = await this._Offer.findAll({include});
+
+    const offers = await this._Offer.findAll(options);
     return offers.map((item) => item.get());
   }
 
