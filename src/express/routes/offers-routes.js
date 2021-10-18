@@ -62,8 +62,9 @@ offersRouter.get(`/edit/:id`, async (req, res) => {
 
 offersRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
+
   try {
-    const offer = await api.getOffer(id, true);
+    const offer = await api.getOffer({id, needComments: true});
     res.render(`offers/ticket`, {offer, ...utils});
   } catch (error) {
     res.render(`errors/404`);

@@ -34,12 +34,15 @@ module.exports = (app, offerService, commentService) => {
 
   offersRoute.get(`/:offerId`, async (req, res) => {
     const {offerId} = req.params;
-    const {comments} = req.query;
-    const offer = await offerService.findOne(offerId, comments);
+    const {needComments} = req.query;
+
+    const offer = await offerService.findOne({id: offerId, needComments});
+
     if (!offer) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Unable to find offer with id:${offerId}`);
     }
+
     return res.status(HttpCode.OK)
       .json(offer);
   });

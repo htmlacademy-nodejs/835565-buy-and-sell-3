@@ -23,8 +23,8 @@ class API {
     return this._load(`/offers`, {params: {offset, limit, needComments}});
   }
 
-  getOffer(id, comments) {
-    return this._load(`/offers/${id}`, {params: {comments}});
+  getOffer({id, needComments}) {
+    return this._load(`/offers/${id}`, {params: {needComments}});
   }
 
   search(query) {
