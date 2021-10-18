@@ -45,9 +45,8 @@ const readContent = async (filePath) => {
   }
 };
 
-const getRandomSubarray = (items) => {
+const getRandomSubarray = (items, count) => {
   items = items.slice();
-  let count = getRandomNum(1, items.length - 1);
   const result = [];
   while (count--) {
     result.push(

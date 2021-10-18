@@ -7,7 +7,6 @@ const USER_ARGV_INDEX = 2;
 const DEFAULT_PORT_SERVER = 3000;
 const API_PREFIX = `/api`;
 const NOT_FOUND_MESSAGE = `NOT FOUND!`;
-const DESCRIPTION_CHAR_LENGTH = 1000;
 
 const ExitCode = {
   SUCCESS: 0,
@@ -18,6 +17,10 @@ const Env = {
   DEVELOPMENT: `development`,
   PRODUCTION: `production`
 };
+
+// DB
+const DESCRIPTION_CHAR_LENGTH = 1000;
+const ORDER_BY_LATEST_DATE = [`createdAt`, `DESC`];
 
 // File names and paths
 const FILE_NAME = `mocks.json`;
@@ -40,6 +43,7 @@ const MAX_ID_LENGTH = 10;
 const TIMEOUT = 1000;
 const MAX_UPLOAD_FILE_SIZE = 1048576;
 const DATE_FORMAT = `DD MMMM YYYY`;
+const OFFERS_PER_PAGE = 8;
 
 const defaultOfferKeys = [`title`, `createdAt`, `picture`, `description`, `type`, `sum`, `categories`];
 const defaultCommentKeys = [`text`, `createdAt`];
@@ -118,9 +122,12 @@ module.exports = {
   DEFAULT_PORT_SERVER,
   API_PREFIX,
   NOT_FOUND_MESSAGE,
-  DESCRIPTION_CHAR_LENGTH,
   ExitCode,
   Env,
+
+  // DB
+  DESCRIPTION_CHAR_LENGTH,
+  ORDER_BY_LATEST_DATE,
 
   // File names and paths
   FILE_NAME,
@@ -143,6 +150,7 @@ module.exports = {
   TIMEOUT,
   MAX_UPLOAD_FILE_SIZE,
   DATE_FORMAT,
+  OFFERS_PER_PAGE,
   defaultOfferKeys,
   defaultCommentKeys,
   HttpCode,

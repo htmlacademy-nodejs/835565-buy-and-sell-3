@@ -34,9 +34,6 @@ module.exports = {
     }
     logger.info(`Connection to database established`);
 
-    // const titles = await readContent(OFFER_TITLES_PATH);
-    // const descriptions = await readContent(OFFER_DESCRIPTIONS_PATH);
-    // const commentSentences = await readContent(FILE_COMMENTS_PATH);
     const categories = await readContent(OFFER_CATEGORIES_PATH);
 
     const options = {

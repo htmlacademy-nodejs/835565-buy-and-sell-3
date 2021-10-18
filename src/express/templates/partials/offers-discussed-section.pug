@@ -1,0 +1,9 @@
+block content
+  section.tickets-list
+    h2.visually-hidden Самые обсуждаемые предложения
+    .tickets-list__wrapper
+      .tickets-list__header
+        p.tickets-list__title Самые обсуждаемые
+      ul
+        each offer in offers.discussed
+          include offers-list-item.pug

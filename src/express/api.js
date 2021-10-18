@@ -1,9 +1,9 @@
 'use strict';
 
 const axios = require(`axios`);
-const {TIMEOUT} = require(`../const`);
+const {TIMEOUT, DEFAULT_PORT_SERVER} = require(`../const`);
 
-const port = process.env.API_PORT || 3000;
+const port = process.env.API_PORT || DEFAULT_PORT_SERVER;
 const defaultUrl = `http://localhost:${port}/api/`;
 
 class API {
@@ -19,12 +19,12 @@ class API {
     return response.data;
   }
 
-  getOffers({comments} = {}) {
-    return this._load(`/offers`, {params: {comments}});
+  getOffers({offset, limit, needComments} = {}) {
+    return this._load(`/offers`, {params: {offset, limit, needComments}});
   }
 
-  getOffer(id, comments) {
-    return this._load(`/offers/${id}`, {params: {comments}});
+  getOffer({id, needComments}) {
+    return this._load(`/offers/${id}`, {params: {needComments}});
   }
 
   search(query) {

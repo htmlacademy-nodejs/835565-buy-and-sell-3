@@ -63,7 +63,7 @@ const generateOffersForDB = (count, {titles, descriptions, commentSentences, cat
     description: shuffle(descriptions).slice(0, getRandomNum(OfferSentencesNum.MIN, OfferSentencesNum.MAX)).join(` `),
     type: Object.keys(OfferType)[Math.floor(Math.random() * Object.keys(OfferType).length)],
     sum: getRandomNum(PriceLimit.MIN, PriceLimit.MAX),
-    categories: getRandomSubarray(categories),
+    categories: getRandomSubarray(categories, getRandomNum(CategoriesNum.MIN, CategoriesNum.MAX)),
     userId: getRandomNum(1, mockUsersCount),
     comments: generateCommentsForDB(getRandomNum(CommentsNum.MIN, CommentsNum.MAX), index + 1, mockUsersCount, commentSentences),
   }));

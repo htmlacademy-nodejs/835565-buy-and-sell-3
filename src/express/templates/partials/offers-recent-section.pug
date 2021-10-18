@@ -1,0 +1,9 @@
+block content
+  section.tickets-list
+    h2.visually-hidden Самые новые предложения
+    .tickets-list__wrapper
+      .tickets-list__header
+        p.tickets-list__title Самое свежее
+      ul
+        each offer in offers.recent
+          include offers-list-item.pug
