@@ -47,16 +47,13 @@ class OfferService {
 
   async findAll(needComments) {
     const options = {
-      include: [Aliase.CATEGORIES],
-      order: [ORDER_BY_LATEST_DATE]
+      include: needComments
+        ? [Aliase.CATEGORIES, Aliase.COMMENTS]
+        : [Aliase.CATEGORIES],
+      order: needComments
+        ? [{model: this._Comment, as: Aliase.COMMENTS}, `createdAt`, `DESC`]
+        : [ORDER_BY_LATEST_DATE]
     };
-
-    if (needComments) {
-      options.include.push(Aliase.COMMENTS);
-      options.order[0] = [
-        {model: this._Comment, as: Aliase.COMMENTS}, `createdAt`, `DESC`
-      ];
-    }
 
     const offers = await this._Offer.findAll(options);
     return offers.map((item) => item.get());
@@ -66,12 +63,8 @@ class OfferService {
     if (!needComments) {
       const options = {
         limit,
-        include: [
-          Aliase.CATEGORIES
-        ],
-        order: [
-          ORDER_BY_LATEST_DATE
-        ]
+        include: [Aliase.CATEGORIES],
+        order: [ORDER_BY_LATEST_DATE]
       };
       return await this._Offer.findAll(options);
     }
@@ -118,9 +111,7 @@ class OfferService {
       limit,
       offset,
       include: [Aliase.CATEGORIES],
-      order: [
-        ORDER_BY_LATEST_DATE
-      ],
+      order: [ORDER_BY_LATEST_DATE],
       distinct: true
     });
     return {count, offers: rows};
