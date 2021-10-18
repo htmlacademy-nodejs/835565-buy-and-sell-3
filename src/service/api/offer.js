@@ -12,6 +12,11 @@ module.exports = (app, offerService, commentService) => {
 
   app.use(`/offers`, offersRoute);
 
+
+  /**
+   * Main route to get offers
+   * according to query option
+   */
   offersRoute.get(`/`, async (req, res) => {
     const {offset, limit, needComments} = req.query;
 
@@ -32,6 +37,11 @@ module.exports = (app, offerService, commentService) => {
     return res.status(HttpCode.OK).json(offers);
   });
 
+
+  /**
+   * Current single OFFER routes
+   * to handle CRUD operations
+   */
   offersRoute.get(`/:offerId`, async (req, res) => {
     const {offerId} = req.params;
     const {needComments} = req.query;
@@ -53,49 +63,71 @@ module.exports = (app, offerService, commentService) => {
       .json(offer);
   });
 
-  offersRoute.post(`/:offerId/comments`, [offerExist(offerService), commentValidator], async (req, res) => {
-    const {offerId} = req.params;
-    const comment = await commentService.create(offerId, req.body);
-    return res.status(HttpCode.CREATED)
-      .json(comment);
-  });
-
-  offersRoute.get(`/:offerId/comments`, offerExist(offerService), async (req, res) => {
-    const {offerId} = req.params;
-    const comments = await commentService.findAll(offerId);
-    return res.status(HttpCode.OK)
-      .json(comments);
-  });
-
   offersRoute.put(`/:offerId`, [offerExist(offerService), offerValidator], async (req, res) => {
     const {offerId} = req.params;
+
     const updatedOffer = await offerService.update(offerId, req.body);
+
     if (!updatedOffer) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Unable to find offer with id:${offerId}`);
     }
+
     return res.status(HttpCode.OK)
       .send(`Updated`);
   });
 
   offersRoute.delete(`/:offerId`, async (req, res) => {
     const {offerId} = req.params;
-    const deletedOffer = await offerService.drop(offerId);
+
+    const deletedOffer = await offerService.findOne({id: offerId});
+
     if (!deletedOffer) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Cannot delete unexisting offer`);
     }
+
+    await offerService.drop(offerId);
+
     return res.status(HttpCode.OK)
       .send(`Deleted`);
   });
 
-  offersRoute.delete(`/:offerId/comments/:commentId`, offerExist(offerService), (req, res) => {
+
+  /**
+   * Current offer's COMMENTS routes
+   * to handle CRUD operations
+   */
+  offersRoute.get(`/:offerId/comments`, offerExist(offerService), async (req, res) => {
+    const {offerId} = req.params;
+
+    const comments = await commentService.findAll(offerId);
+
+    return res.status(HttpCode.OK)
+      .json(comments);
+  });
+
+  offersRoute.post(`/:offerId/comments`, [offerExist(offerService), commentValidator], async (req, res) => {
+    const {offerId} = req.params;
+
+    const comment = await commentService.create(offerId, req.body);
+
+    return res.status(HttpCode.CREATED)
+      .json(comment);
+  });
+
+  offersRoute.delete(`/:offerId/comments/:commentId`, offerExist(offerService), async (req, res) => {
     const {offerId, commentId} = req.params;
-    const deletedComment = commentService.drop(offerId, commentId);
+
+    const deletedComment = await commentService.findOne(offerId, commentId);
+
     if (!deletedComment) {
       return res.status(HttpCode.NOT_FOUND)
         .send(`Cannot delete unexisting comment`);
     }
+
+    await commentService.drop(offerId, commentId);
+
     return res.status(HttpCode.OK)
       .send(`Deleted`);
   });
