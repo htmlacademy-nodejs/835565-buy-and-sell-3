@@ -34,7 +34,7 @@ myRouter.get(`/`, async (req, res) => {
 
     const options = {
       offers,
-      page,
+      page: +page,
       totalPages,
       categories
     };
